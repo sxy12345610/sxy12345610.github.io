@@ -1,0 +1,1671 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>平行世界情绪驿站</title>
+    <!-- 引入QRCode.js库用于生成二维码 -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+    <!-- 引入html2canvas库用于生成海报图片 -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #fdf6e3 0%, #fce4ec 50%, #e8f5e9 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding-bottom: calc(56px + env(safe-area-inset-bottom));
+            -webkit-overflow-scrolling: touch;
+        }
+        .container { 
+            max-width: 420px; 
+            margin: 0 auto; 
+            padding: 20px 15px calc(70px + env(safe-area-inset-bottom));
+            position: relative;
+            animation: pageFadeIn 0.4s ease-out;
+            width: 100%;
+        }
+        .container.page-transition {
+            animation: pageSlideOut 0.3s ease-in forwards;
+        }
+        @keyframes pageFadeIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes pageSlideOut {
+            from { opacity: 1; transform: translateX(0); }
+            to { opacity: 0; transform: translateX(-20px); }
+        }
+        .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .particle {
+            position: absolute; width: 4px; height: 4px; background: rgba(255, 182, 193, 0.5);
+            border-radius: 50%; animation: float 8s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) translateX(100px); opacity: 0; }
+        }
+        .home-page { text-align: center; padding-top: 60px; }
+        .home-title { font-size: 32px; font-weight: bold; color: #5d4e6d; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); }
+        .home-subtitle { font-size: 16px; color: #8d7a9e; margin-bottom: 40px; }
+        .start-btn {
+            background: linear-gradient(135deg, #ffb7b2 0%, #ffecd2 100%);
+            border: none; padding: 15px 40px; font-size: 18px; font-weight: bold;
+            color: #5d4e6d; border-radius: 50px;
+            box-shadow: 0 8px 25px rgba(255, 183, 178, 0.4);
+            cursor: pointer; transition: all 0.3s ease; margin-top: 20px;
+        }
+        .start-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(255, 183, 178, 0.5); }
+        .start-btn:active { transform: translateY(0); }
+        .page-title { font-size: 24px; font-weight: bold; color: #5d4e6d; text-align: center; margin-bottom: 30px; }
+        .emotion-page { padding-top: 30px; }
+        .emotion-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .emotion-card {
+            background: white; border-radius: 20px; padding: 25px 15px; text-align: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08); cursor: pointer;
+            transition: all 0.3s ease; border: 2px solid transparent;
+        }
+        .emotion-card:hover { 
+    transform: translateY(-5px); 
+    box-shadow: 0 12px 30px rgba(0,0,0,0.12); 
+}
+/* 情绪卡片选中动画 - 高亮+放大+阴影+弹跳 */
+.emotion-card.selected { 
+    border-color: #ffb7b2; 
+    transform: scale(1.08);
+    box-shadow: 0 15px 40px rgba(255, 183, 178, 0.5);
+    animation: cardBounce 0.4s ease-out;
+}
+@keyframes cardBounce {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.12); }
+    100% { transform: scale(1.08); }
+}
+
+/* 页面加载淡入动画 */
+body {
+    animation: fadeIn 1s ease-out;
+}
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+        .emotion-icon { font-size: 40px; margin-bottom: 10px; }
+        .emotion-name { font-size: 18px; font-weight: bold; color: #5d4e6d; }
+        .cards-page { padding-top: 20px; }
+        .cards-container { display: flex; flex-direction: column; gap: 20px; }
+        .card-wrapper { 
+            perspective: 1000px; 
+            opacity: 0;
+            transform: translateY(30px);
+            animation: cardSlideIn 0.5s ease-out forwards;
+        }
+        .card-wrapper:nth-child(1) { animation-delay: 0.1s; }
+        .card-wrapper:nth-child(2) { animation-delay: 0.2s; }
+        .card-wrapper:nth-child(3) { animation-delay: 0.3s; }
+        
+        @keyframes cardSlideIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .card {
+            width: 100%; height: 200px; position: relative;
+            transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        }
+        .card.flipped { 
+            transform: rotateY(180deg); 
+        }
+
+        .card-front,
+        .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .card-back {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .card-front {
+            background: white;
+            transform: rotateY(180deg);
+        }
+        .card-sparkles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+        .sparkle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: white;
+            border-radius: 50%;
+            animation: sparkle 0.8s ease-out forwards;
+            opacity: 0;
+        }
+        @keyframes sparkle {
+            0% { 
+                transform: scale(0) translateY(0); 
+                opacity: 1; 
+            }
+            100% { 
+                transform: scale(1) translateY(-50px); 
+                opacity: 0; 
+            }
+        }
+        .card-back-icon { font-size: 50px; margin-bottom: 10px; }
+        .card-back-text { font-size: 16px; opacity: 0.9; }
+        .card-front { background: white; transform: rotateY(180deg); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+        .emotion-tag { font-size: 12px; padding: 4px 12px; border-radius: 20px; margin-bottom: 10px; color: white; font-weight: bold; }
+        .story-text { font-size: 15px; color: #5d4e6d; text-align: center; line-height: 1.6; margin-bottom: 15px; flex: 1; display: flex; align-items: center; }
+        .challenge-box { background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 12px; padding: 12px; width: 100%; }
+        .challenge-label { font-size: 12px; color: #8d7a9e; margin-bottom: 5px; }
+        .challenge-text { font-size: 14px; color: #5d4e6d; font-weight: 500; }
+        .complete-btn {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            border: none; padding: 10px 25px; border-radius: 30px;
+            font-size: 14px; font-weight: bold; color: #5d4e6d;
+            margin-top: 15px; cursor: pointer; transition: all 0.3s ease;
+        }
+        .complete-btn:hover { transform: scale(1.05); }
+        .complete-btn.completed { background: linear-gradient(135deg, #c8e6c9 0%, #b2dfdb 100%); color: #66bb6a; }
+        .btn-group { display: flex; gap: 15px; margin-top: 30px; }
+        .btn { flex: 1; padding: 15px; border: none; border-radius: 15px; font-size: 16px; font-weight: bold; cursor: pointer; transition: all 0.3s ease; }
+        .btn-primary { background: linear-gradient(135deg, #ffb7b2 0%, #ffecd2 100%); color: #5d4e6d; }
+        .btn-secondary { background: white; color: #5d4e6d; border: 2px solid #e9ecef; }
+        .btn:hover { transform: translateY(-2px); }
+        .messages-wall { 
+            position: fixed; 
+            bottom: calc(60px + env(safe-area-inset-bottom)); 
+            left: 0; 
+            width: 100%; 
+            height: 80px; 
+            overflow: hidden; 
+            pointer-events: none; 
+            z-index: 100; 
+        }
+        .message-item {
+            position: absolute; white-space: nowrap; font-size: 14px;
+            color: rgba(93, 78, 109, 0.7); animation: floatMessage 15s linear infinite;
+        }
+        @keyframes floatMessage {
+            from { transform: translateX(100vw); }
+            to { transform: translateX(-100%); }
+        }
+        .poster-page { padding-top: 20px; }
+        .input-group { margin-bottom: 20px; }
+        .input-label { display: block; font-size: 14px; color: #5d4e6d; margin-bottom: 8px; }
+        .input-field {
+            width: 100%; padding: 15px; border: 2px solid #e9ecef;
+            border-radius: 12px; font-size: 16px; outline: none;
+            transition: all 0.3s ease;
+        }
+        .input-field:focus { border-color: #ffb7b2; }
+        .generate-btn {
+            width: 100%; background: linear-gradient(135deg, #ffb7b2 0%, #ffecd2 100%);
+            border: none; padding: 15px; border-radius: 15px;
+            font-size: 18px; font-weight: bold; color: #5d4e6d;
+            cursor: pointer; transition: all 0.3s ease;
+        }
+        .generate-btn:hover { transform: translateY(-2px); }
+        .poster-card {
+            background: white; border-radius: 20px; padding: 30px;
+            margin-top: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .poster-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px; padding: 40px 20px; color: white;
+        }
+        .poster-id { font-size: 12px; opacity: 0.8; margin-bottom: 15px; }
+        .poster-title { font-size: 28px; font-weight: bold; margin-bottom: 20px; }
+        .poster-name { font-size: 18px; opacity: 0.9; }
+        .save-btn { margin-top: 20px; background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%); }
+        .stats-page { padding-top: 20px; }
+        .stat-item {
+            background: white; border-radius: 15px; padding: 20px;
+            margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .stat-value { font-size: 36px; font-weight: bold; color: #5d4e6d; }
+        .stat-label { font-size: 14px; color: #8d7a9e; margin-top: 5px; }
+        .confetti { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1000; }
+        .confetti-piece {
+            position: absolute; width: 10px; height: 10px;
+            background: #ffb7b2; animation: confettiFall 2s ease-in forwards;
+        }
+        @keyframes confettiFall {
+            0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+        .back-btn {
+            position: absolute; top: 20px; left: 20px; width: 45px; height: 45px;
+            background: white; border: none; border-radius: 50%; font-size: 20px;
+            cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease; z-index: 10;
+        }
+        .back-btn:hover { transform: scale(1.1); }
+        nav {
+            position: fixed; 
+            bottom: 0; 
+            left: 0; 
+            width: 100%; 
+            background: white;
+            padding: 8px 15px calc(8px + env(safe-area-inset-bottom)); 
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.08); 
+            z-index: 50;
+            border-radius: 15px 15px 0 0;
+            height: calc(56px + env(safe-area-inset-bottom));
+            display: flex;
+            align-items: center;
+        }
+        nav div { max-width: 420px; margin: 0 auto; display: flex; justify-content: space-around; width: 100%; }
+        nav button { 
+            border: none; background: none; cursor: pointer; 
+            padding: 8px 12px; border-radius: 12px; 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex; flex-direction: column; 
+            align-items: center; position: relative;
+        }
+        nav button:hover { background: rgba(139, 92, 246, 0.05); }
+        nav button.active { 
+            transform: translateY(-4px);
+        }
+        nav button.active .nav-icon { 
+            color: #8B5CF6; 
+            filter: drop-shadow(0 2px 4px rgba(139, 92, 246, 0.4));
+        }
+        nav button.active .nav-text { 
+            color: #8B5CF6; 
+            font-weight: bold;
+        }
+        nav button.active .nav-dot { 
+            opacity: 1; 
+            transform: scale(1);
+        }
+        .nav-icon { font-size: 24px; color: #999; transition: all 0.3s ease; }
+        .nav-text { 
+            font-size: 11px; color: #999; margin-top: 3px; 
+            transition: all 0.3s ease;
+        }
+        .nav-dot { 
+            position: absolute; bottom: -4px; width: 6px; height: 6px; 
+            background: #8B5CF6; border-radius: 50%; 
+            opacity: 0; transform: scale(0);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .page-header { display: flex; align-items: center; margin-bottom: 25px; padding-top: 10px; }
+        .page-header-back { width: 40px; height: 40px; background: white; border: none; border-radius: 50%; font-size: 18px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-right: 15px; transition: all 0.3s ease; }
+        .page-header-back:hover { transform: scale(1.1); }
+        .page-header-title { font-size: 22px; font-weight: bold; color: #5d4e6d; }
+        .progress-bar { background: #e9ecef; border-radius: 10px; height: 8px; margin-top: 8px; overflow: hidden; }
+        .progress-fill { height: 100%; border-radius: 10px; background: linear-gradient(90deg, #ffb7b2, #ffecd2); transition: width 0.5s ease; }
+        .achievement { display: inline-flex; align-items: center; background: linear-gradient(135deg, #fff9c4 0%, #ffecb3 100%); padding: 5px 12px; border-radius: 20px; font-size: 12px; color: #5d4e6d; margin: 5px; }
+        .achievement::before { content: '🏆'; margin-right: 5px; }
+        .float-tip { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.8); color: white; padding: 20px 30px; border-radius: 15px; font-size: 16px; z-index: 1000; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
+        .float-tip img { max-width: 200px; border-radius: 10px; margin: 10px 0; }
+        .mood-bar-container {
+            width: 100%;
+        }
+        .mood-bar {
+            height: 8px;
+            border-radius: 4px;
+            background: linear-gradient(90deg, #ff6b6b, #ffd93d, #6bcb77, #4d96ff);
+            background-size: 400% 100%;
+            transition: all 0.3s ease;
+        }
+        .mood-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        @keyframes floatUp { 0% { transform: translateY(0) translateX(0); opacity: 1; } 100% { transform: translateY(-100vh) translateX(20px); opacity: 0; } }
+        .small-action { animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        /* 深夜模式样式 */
+        body.night-mode {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #e8e8e8;
+        }
+        body.night-mode .home-title { color: #ffffff; }
+        body.night-mode .home-subtitle { color: #c0c0c0; }
+        body.night-mode .page-header-title { color: #ffffff; }
+        body.night-mode .emotion-card { background: rgba(255, 255, 255, 0.1); }
+        body.night-mode .emotion-card.selected { background: rgba(139, 92, 246, 0.3); }
+        body.night-mode .emotion-card .emotion-name { color: #e8e8e8; }
+        body.night-mode .card-back { 
+            background: linear-gradient(135deg, rgba(76, 29, 149, 0.7) 0%, rgba(99, 102, 241, 0.7) 100%); 
+            color: #ffffff;
+        }
+        body.night-mode .card-front { background: rgba(255, 255, 255, 0.1); }
+        body.night-mode .card-front .story-text { color: #e8e8e8; }
+        body.night-mode .card-front .challenge-text { color: #e0e0e0; }
+        body.night-mode .card-front .challenge-label { color: #c0c0c0; }
+        body.night-mode .card-front .social-count { color: #c0c0c0; }
+        body.night-mode .card-front .social-count span { color: #e8e8e8; }
+        body.night-mode .poster-card { background: rgba(255, 255, 255, 0.1); }
+        body.night-mode .poster-bg { 
+            background: linear-gradient(135deg, rgba(76, 29, 149, 0.7) 0%, rgba(99, 102, 241, 0.7) 100%); 
+            color: #ffffff;
+        }
+        body.night-mode .input-field { background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.2); color: #ffffff; }
+        body.night-mode .input-field::placeholder { color: #909090; }
+        body.night-mode .btn-primary { background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%); }
+        body.night-mode .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #ffffff; }
+        body.night-mode nav { background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(10px); }
+        body.night-mode .stat-item { background: rgba(255, 255, 255, 0.1); }
+        body.night-mode .stat-value { color: #ffffff; }
+        body.night-mode .achievement { background: rgba(255, 215, 0, 0.2); color: #ffd700; }
+        body.night-mode .mood-bar { background: linear-gradient(90deg, #ff6b6b, #ffd93d, #6bcb77, #4d96ff); }
+        body.night-mode .message-input-area { background: rgba(255, 255, 255, 0.1); }
+        body.night-mode .message-input-area p { color: #e8e8e8; }
+        body.night-mode .message-item { color: #c0c0c0; }
+        body.night-mode .nav-text { color: #c0c0c0; }
+        body.night-mode .nav-icon { color: #c0c0c0; }
+        
+        /* 响应式适配 - 小屏幕优化 */
+        @media screen and (max-width: 375px) {
+            .home-title { font-size: 26px; }
+            .home-subtitle { font-size: 14px; }
+            .emotion-card { padding: 20px 12px; }
+            .emotion-icon { font-size: 36px; }
+            .card { height: 180px; }
+            .story-text { font-size: 14px; }
+            .challenge-text { font-size: 13px; }
+        }
+        
+        /* 确保卡片内容不被遮挡 */
+        .card-front {
+            overflow: hidden;
+        }
+        
+        .story-text {
+            word-wrap: break-word;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    <div class="container" id="container"></div>
+    <div class="messages-wall" id="messages-wall"></div>
+    <nav>
+        <div>
+            <button onclick="goToHome()" id="nav-home" class="active">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-text">首页</span>
+                <span class="nav-dot"></span>
+            </button>
+            <button onclick="goToEmotionPage()" id="nav-emotion">
+                <span class="nav-icon">🧩</span>
+                <span class="nav-text">心情</span>
+                <span class="nav-dot"></span>
+            </button>
+            <button onclick="goToPosterPage()" id="nav-poster">
+                <span class="nav-icon">🖼</span>
+                <span class="nav-text">平行故事</span>
+                <span class="nav-dot"></span>
+            </button>
+            <button onclick="goToStatsPage()" id="nav-stats">
+                <span class="nav-icon">📊</span>
+                <span class="nav-text">旅程</span>
+                <span class="nav-dot"></span>
+            </button>
+        </div>
+    </nav>
+
+    <script>
+        // 情绪故事数据
+        const stories = [
+            {"emotion":"开心","text":"午后阳光洒落图书馆，书页上金色光斑跳跃。","challenge":"闭眼感受阳光落在脸上的温度"},
+            {"emotion":"开心","text":"食堂阿姨悄悄多打一勺红烧肉，暖意从胃里散开。","challenge":"对今天遇到的第一个人微笑"},
+            {"emotion":"开心","text":"室友带回糖炒栗子，整个宿舍弥漫甜蜜香气。","challenge":"分享一颗糖给身边的人"},
+            {"emotion":"开心","text":"操场微风轻拂，耳机里放着喜欢的歌，脚步轻快跳跃。","challenge":"哼一首喜欢的歌走回宿舍"},
+            {"emotion":"开心","text":"社团活动认识新朋友，相谈甚欢仿佛相识已久。","challenge":"主动和陌生人打个招呼"},
+            {"emotion":"开心","text":"收到家人包裹，里面是妈妈做的饼干和手写的信。","challenge":"给家人发一条暖心消息"},
+            {"emotion":"开心","text":"自习室偶遇暗恋的人，一起安静学习时光温柔。","challenge":"对喜欢的人说句早安"},
+            {"emotion":"开心","text":"雨后校园空气清新，草地上冒出小蘑菇像童话世界。","challenge":"寻找校园里的小美好"},
+            {"emotion":"开心","text":"小组作业顺利完成，大家吃火锅庆祝笑声回荡。","challenge":"和朋友约一顿饭"},
+            {"emotion":"开心","text":"图书馆靠窗位置空着，窗外樱花盛开读了一下午书。","challenge":"读一页喜欢的书"},
+            {"emotion":"开心","text":"清晨操场跑步，日出从教学楼升起美得让人感动。","challenge":"早起看一次日出"},
+            {"emotion":"开心","text":"图书馆偶遇老师，夸我上次作业写得好心里美滋滋。","challenge":"感谢今天帮助你的人"},
+            {"emotion":"开心","text":"宿舍楼下猫咪主动蹭我，毛茸茸身子让心情变好。","challenge":"喂一次流浪小动物"},
+            {"emotion":"开心","text":"书店发现找了很久的书，翻开第一页就爱上了。","challenge":"读一本治愈的书"},
+            {"emotion":"开心","text":"雨后天空出现彩虹，整个校园被染成彩色。","challenge":"用相机记录美好瞬间"},
+            {"emotion":"开心","text":"参加校园歌手大赛获第二名，站在舞台闪闪发光。","challenge":"为自己鼓掌"},
+            {"emotion":"开心","text":"食堂新开奶茶店买一送一，和室友一人一杯。","challenge":"和朋友分享快乐"},
+            {"emotion":"开心","text":"收到笔友回信，字里行间都是温暖很感动。","challenge":"写一封手写信"},
+            {"emotion":"开心","text":"周末和朋友公园野餐，阳光正好微风不燥时光慢。","challenge":"策划一次户外活动"},
+            {"emotion":"开心","text":"发现无人知晓的自习角落，安静舒适很满足。","challenge":"打造自己的小天地"},
+            {"emotion":"焦虑","text":"期末复习压力大，书本堆成小山不知从哪开始。","challenge":"把任务分成小份逐个完成"},
+            {"emotion":"焦虑","text":"社团面试前心跳加速，担心表现不好手心冒汗。","challenge":"做三次深呼吸放松身心"},
+            {"emotion":"焦虑","text":"别人都有明确目标，自己还在迷茫时间过得快。","challenge":"写下三个今天能做的小事"},
+            {"emotion":"焦虑","text":"考试前一晚失眠，满脑子知识点越想睡越清醒。","challenge":"听一首舒缓的音乐"},
+            {"emotion":"焦虑","text":"实习offer迟迟没来，同学都有着落心里慌。","challenge":"列一份自我肯定清单"},
+            {"emotion":"焦虑","text":"小组作业进度落后，队友意见不合deadline近。","challenge":"和团队好好沟通分工"},
+            {"emotion":"焦虑","text":"父母打电话问成绩，害怕失望不知怎么开口。","challenge":"坦诚和家人聊聊感受"},
+            {"emotion":"焦虑","text":"体重秤数字又涨了，想减肥却管不住嘴矛盾。","challenge":"今天做十分钟运动"},
+            {"emotion":"焦虑","text":"明天上台演讲，稿子背好几遍担心忘词坐立不安。","challenge":"对着镜子练习微笑"},
+            {"emotion":"焦虑","text":"社交场合总是紧张，怕说错话不敢主动开口。","challenge":"今天主动说三句话"},
+            {"emotion":"焦虑","text":"英语六级又没过，考了三次自信心受打击。","challenge":"制定每日学习计划"},
+            {"emotion":"焦虑","text":"实习期间犯错误，担心被领导批评心神不宁。","challenge":"主动承认错误并改正"},
+            {"emotion":"焦虑","text":"看着银行卡余额越来越少，不好意思向家里要钱纠结。","challenge":"制定合理的消费计划"},
+            {"emotion":"焦虑","text":"毕业论文开题报告写不出来，导师一直在催压力大。","challenge":"先完成大纲再细化"},
+            {"emotion":"焦虑","text":"体测成绩不理想，担心影响毕业每天努力锻炼。","challenge":"坚持一周运动"},
+            {"emotion":"焦虑","text":"和父母观念冲突多，不知道怎么沟通很无奈。","challenge":"试着理解对方的想法"},
+            {"emotion":"焦虑","text":"社团换届选举临近，不知道要不要竞选很纠结。","challenge":"列出利弊再做决定"},
+            {"emotion":"焦虑","text":"看到别人都在考证书，自己不知道该考什么很迷茫。","challenge":"了解每种证书的用途"},
+            {"emotion":"焦虑","text":"小组作业被队友拖后腿，不好意思说心里委屈。","challenge":"学会合理表达意见"},
+            {"emotion":"焦虑","text":"皮肤状态越来越差，尝试很多护肤品都没用烦躁。","challenge":"保持规律作息"},
+            {"emotion":"疲惫","text":"连续一周熬夜赶作业，眼睛酸涩没力气吃饭。","challenge":"放下手机闭目养神十分钟"},
+            {"emotion":"疲惫","text":"早八课连轴转，中午没休息下午上课眼皮打架。","challenge":"趴在桌上小憩五分钟"},
+            {"emotion":"疲惫","text":"兼职回来深夜，还要赶论文身体像被掏空。","challenge":"泡一杯热牛奶暖暖身"},
+            {"emotion":"疲惫","text":"社团活动太多，学习生活难平衡感觉撑不住。","challenge":"给自己放半天假"},
+            {"emotion":"疲惫","text":"感情上的事让人身心俱疲，想放手却舍不得纠结。","challenge":"写一封给未来自己的信"},
+            {"emotion":"疲惫","text":"宿舍待了一整天什么都没做，却比上课还累。","challenge":"出门走走晒晒太阳"},
+            {"emotion":"疲惫","text":"复习周压力大每天只睡四小时，身体发警告。","challenge":"今晚早点睡觉"},
+            {"emotion":"疲惫","text":"和室友发生不愉快，宿舍气氛压抑心累不想说话。","challenge":"找个朋友聊聊天"},
+            {"emotion":"疲惫","text":"参加太多活动，感觉自己像陀螺不停转找不到方向。","challenge":"关掉手机独处半小时"},
+            {"emotion":"疲惫","text":"期末周食堂人太多随便吃点，胃不舒服心情差。","challenge":"好好吃一顿热饭"},
+            {"emotion":"疲惫","text":"连续三天早八，每天睡眠不足上课听不进去。","challenge":"提前半小时上床"},
+            {"emotion":"疲惫","text":"和男朋友吵架冷战好几天，心里很难受。","challenge":"坦诚沟通解决问题"},
+            {"emotion":"疲惫","text":"社团活动太多，周末比上课还累没时间休息。","challenge":"学会拒绝不必要的活动"},
+            {"emotion":"疲惫","text":"期末考试太多，每天熬夜复习身体快撑不住。","challenge":"制定合理的复习计划"},
+            {"emotion":"疲惫","text":"兼职工作太累影响学习，不知道该不该继续。","challenge":"权衡利弊做决定"},
+            {"emotion":"疲惫","text":"室友晚上打游戏太吵影响睡眠，说好几次没用。","challenge":"好好沟通解决问题"},
+            {"emotion":"疲惫","text":"家里发生事情很担心却无能为力心累。","challenge":"和家人保持联系"},
+            {"emotion":"疲惫","text":"连续写三天论文眼睛快瞎了，还差很多没写完。","challenge":"每小时休息十分钟"},
+            {"emotion":"疲惫","text":"参加招聘会回来身心俱疲，对未来感到迷茫。","challenge":"泡个热水澡放松"},
+            {"emotion":"疲惫","text":"一个人在食堂吃饭，看着别人有伴感觉孤独。","challenge":"主动和同学坐一起"},
+            {"emotion":"迷茫","text":"站在人生十字路口，不知道考研还是工作未来模糊。","challenge":"列出两种选择的优缺点"},
+            {"emotion":"迷茫","text":"不知道自己喜欢什么专业，上课提不起兴趣很无奈。","challenge":"尝试一件从未做过的事"},
+            {"emotion":"迷茫","text":"看着别人都优秀，自己平平无奇感到自卑。","challenge":"写下五个自己的优点"},
+            {"emotion":"迷茫","text":"毕业后不知道去哪里发展，留大城市还是回老家纠结。","challenge":"和学长学姐聊聊经验"},
+            {"emotion":"迷茫","text":"恋爱和学业难兼顾，不知道怎么平衡很无助。","challenge":"画一张人生规划图"},
+            {"emotion":"迷茫","text":"不知道自己想要什么，每天浑浑噩噩像行尸走肉。","challenge":"写下三个梦想清单"},
+            {"emotion":"迷茫","text":"专业太难学不进去，转专业又怕后悔进退两难。","challenge":"找导师谈谈心"},
+            {"emotion":"迷茫","text":"看着别人成双成对，自己单身怀疑自己不够好。","challenge":"享受独处的时光"},
+            {"emotion":"迷茫","text":"不知道毕业后做什么工作，简历一片空白很焦虑。","challenge":"参加一次职业规划讲座"},
+            {"emotion":"迷茫","text":"感觉自己很渺小，在大学里找不到存在感很孤独。","challenge":"加入一个感兴趣的社团"},
+            {"emotion":"迷茫","text":"不知道自己真正喜欢什么，学这个专业只是分数够。","challenge":"尝试不同的兴趣活动"},
+            {"emotion":"迷茫","text":"毕业后想去的城市房价太高，不知道要不要坚持梦想。","challenge":"了解城市的生活成本"},
+            {"emotion":"迷茫","text":"看着同龄人都结婚生子，自己还在上学感到焦虑。","challenge":"享受当下的时光"},
+            {"emotion":"迷茫","text":"不知道自己擅长什么，投简历不知道选什么岗位。","challenge":"做一次职业测评"},
+            {"emotion":"迷茫","text":"恋爱三年了，不知道该不该继续害怕以后后悔。","challenge":"和伴侣好好谈谈未来"},
+            {"emotion":"迷茫","text":"父母希望我回家乡工作，但我想去大城市闯一闯矛盾。","challenge":"列出两种选择的生活"},
+            {"emotion":"迷茫","text":"感觉自己一直在努力，却看不到成果很失落。","challenge":"记录小成就积累信心"},
+            {"emotion":"迷茫","text":"不知道怎么和导师搞好关系，每次见面都紧张。","challenge":"主动和导师交流"},
+            {"emotion":"迷茫","text":"社团里找不到归属感，想退出又怕尴尬很纠结。","challenge":"勇敢做出选择"},
+            {"emotion":"迷茫","text":"喜欢上了一个不可能的人，不知道该怎么放下。","challenge":"把注意力转移到自己身上"},
+            {"emotion":"兴奋","text":"收到心仪公司面试邀请，激动得睡不着充满期待。","challenge":"为面试做一次模拟练习"},
+            {"emotion":"兴奋","text":"喜欢的歌手要来学校开演唱会，抢到票心跳加速。","challenge":"提前准备应援口号"},
+            {"emotion":"兴奋","text":"小组项目拿一等奖，大家抱在一起欢呼眼眶红了。","challenge":"和团队一起庆祝"},
+            {"emotion":"兴奋","text":"暗恋的人主动约我看电影，紧张又期待整晚想穿什么。","challenge":"准备一份小礼物"},
+            {"emotion":"兴奋","text":"收到奖学金通知，终于可以给家人买礼物很开心。","challenge":"计划一次短途旅行"},
+            {"emotion":"兴奋","text":"第一次上台表演，台下掌声响起心里暖暖的。","challenge":"记录下这一刻的感受"},
+            {"emotion":"兴奋","text":"和好朋友计划的毕业旅行终于要出发好期待！","challenge":"列一份旅行清单"},
+            {"emotion":"兴奋","text":"学会了一直想学的技能，成就感难以言喻。","challenge":"教别人这个技能"},
+            {"emotion":"兴奋","text":"校园偶遇喜欢的明星，激动得手抖赶紧合影留念。","challenge":"把照片做成明信片"},
+            {"emotion":"兴奋","text":"收到心仪大学研究生录取通知书，所有努力都值得。","challenge":"和家人分享这份喜悦"},
+            {"emotion":"兴奋","text":"拿到驾照终于可以自己开车兜风好开心！","challenge":"开车去一次近郊"},
+            {"emotion":"兴奋","text":"参加创业比赛获奖了，奖金可以实现小梦想很激动。","challenge":"规划奖金的用途"},
+            {"emotion":"兴奋","text":"校园花开了，和室友一起拍照留下美好回忆。","challenge":"拍一张校园美景"},
+            {"emotion":"兴奋","text":"收到期待已久的演唱会门票，终于可以去见偶像！","challenge":"准备应援物品"},
+            {"emotion":"兴奋","text":"第一次做志愿者帮助别人，心里暖暖的。","challenge":"记录志愿服务的感受"},
+            {"emotion":"兴奋","text":"学会做蛋糕，第一次成功激动得跳起来。","challenge":"给朋友分享自己做的蛋糕"},
+            {"emotion":"兴奋","text":"图书馆找到绝版书如获至宝，赶紧借来看。","challenge":"写一篇读后感"},
+            {"emotion":"兴奋","text":"参加校园马拉松，虽然没拿奖但坚持跑完全程。","challenge":"为自己鼓掌喝彩"},
+            {"emotion":"兴奋","text":"收到暗恋对象的表白，心跳加速幸福来得太突然。","challenge":"珍惜这份感情"},
+            {"emotion":"兴奋","text":"申请到心仪的交换项目，即将开启新旅程很期待。","challenge":"提前了解目的地文化"}
+        ];
+
+        // 平行职业数据
+        const parallelJobs = [
+            {"nickname":"星野","parallelJob":"云朵收集师","id":"001"},
+            {"nickname":"小羽","parallelJob":"梦境编织者","id":"002"},
+            {"nickname":"阿沐","parallelJob":"月光守护者","id":"003"},
+            {"nickname":"林夕","parallelJob":"故事收藏家","id":"004"},
+            {"nickname":"清风","parallelJob":"情绪整理师","id":"005"},
+            {"nickname":"小鹿","parallelJob":"森林信使","id":"006"},
+            {"nickname":"暖阳","parallelJob":"温暖传递者","id":"007"},
+            {"nickname":"云朵","parallelJob":"彩虹制造师","id":"008"},
+            {"nickname":"星辰","parallelJob":"星空绘画师","id":"009"},
+            {"nickname":"半夏","parallelJob":"时光记录员","id":"010"},
+            {"nickname":"海蓝","parallelJob":"海洋倾听者","id":"011"},
+            {"nickname":"枫叶","parallelJob":"季节诗人","id":"012"},
+            {"nickname":"晨曦","parallelJob":"黎明唤醒者","id":"013"},
+            {"nickname":"暮色","parallelJob":"黄昏画家","id":"014"},
+            {"nickname":"细雨","parallelJob":"雨滴舞者","id":"015"},
+            {"nickname":"风铃","parallelJob":"声音捕手","id":"016"},
+            {"nickname":"萤火","parallelJob":"夜晚点灯人","id":"017"},
+            {"nickname":"蒲公英","parallelJob":"梦想播种者","id":"018"},
+            {"nickname":"薄荷","parallelJob":"清凉治愈师","id":"019"},
+            {"nickname":"茉莉","parallelJob":"香气调配师","id":"020"},
+            {"nickname":"Clover","parallelJob":"幸运寻找者","id":"021"},
+            {"nickname":"Luna","parallelJob":"月亮邮递员","id":"022"},
+            {"nickname":"Willow","parallelJob":"柳树低语者","id":"023"},
+            {"nickname":"Sunny","parallelJob":"快乐贩卖机","id":"024"},
+            {"nickname":"Cloud","parallelJob":"棉花糖建筑师","id":"025"},
+            {"nickname":"Stream","parallelJob":"溪流歌唱者","id":"026"},
+            {"nickname":"Breeze","parallelJob":"微风刺绣师","id":"027"},
+            {"nickname":"Petal","parallelJob":"花瓣飘落师","id":"028"},
+            {"nickname":"Dawn","parallelJob":"黎明调色师","id":"029"},
+            {"nickname":"Echo","parallelJob":"回声收集者","id":"030"},
+            {"nickname":"若尘","parallelJob":"尘埃旅行家","id":"031"},
+            {"nickname":"知夏","parallelJob":"蝉鸣翻译官","id":"032"},
+            {"nickname":"听雪","parallelJob":"雪花观察员","id":"033"},
+            {"nickname":"踏春","parallelJob":"青草唤醒师","id":"034"},
+            {"nickname":"望月","parallelJob":"月光酿酒师","id":"035"},
+            {"nickname":"追风","parallelJob":"风的骑手","id":"036"},
+            {"nickname":"弄影","parallelJob":"影子戏演员","id":"037"},
+            {"nickname":"拈花","parallelJob":"花语解读者","id":"038"},
+            {"nickname":"折柳","parallelJob":"柳枝编织者","id":"039"},
+            {"nickname":"枕书","parallelJob":"书本守护者","id":"040"},
+            {"nickname":"抚琴","parallelJob":"音乐疗愈师","id":"041"},
+            {"nickname":"观星","parallelJob":"星座解说员","id":"042"},
+            {"nickname":"听雨","parallelJob":"雨声鉴赏家","id":"043"},
+            {"nickname":"踏雪","parallelJob":"雪印记录者","id":"044"},
+            {"nickname":"寻梅","parallelJob":"暗香寻觅者","id":"045"},
+            {"nickname":"煮茶","parallelJob":"茶香调和师","id":"046"},
+            {"nickname":"煎雪","parallelJob":"冰晶雕刻师","id":"047"},
+            {"nickname":"织梦","parallelJob":"梦境纺织师","id":"048"},
+            {"nickname":"摆渡","parallelJob":"心灵船夫","id":"049"},
+            {"nickname":"拾光","parallelJob":"时光碎片收集者","id":"050"},
+            {"nickname":"微光","parallelJob":"微小光芒守护人","id":"051"},
+            {"nickname":"云朵朵","parallelJob":"天空棉花糖制作师","id":"052"},
+            {"nickname":"糖小果","parallelJob":"甜蜜派送员","id":"053"},
+            {"nickname":"可可","parallelJob":"巧克力魔法师","id":"054"},
+            {"nickname":"布丁","parallelJob":"可爱制造者","id":"055"},
+            {"nickname":"奶糖","parallelJob":"温柔贩卖商","id":"056"},
+            {"nickname":"焦糖","parallelJob":"温暖烘焙师","id":"057"},
+            {"nickname":"草莓","parallelJob":"甜蜜采集者","id":"058"},
+            {"nickname":"蓝莓","parallelJob":"星空酿酒师","id":"059"},
+            {"nickname":"柠檬","parallelJob":"清新传递者","id":"060"},
+            {"nickname":"蜜桃","parallelJob":"美好记录员","id":"061"},
+            {"nickname":"Lucky","parallelJob":"幸运星派送员","id":"062"},
+            {"nickname":"Smile","parallelJob":"微笑收集者","id":"063"},
+            {"nickname":"Hope","parallelJob":"希望播种师","id":"064"},
+            {"nickname":"Dream","parallelJob":"梦想规划师","id":"065"},
+            {"nickname":"Joy","parallelJob":"快乐小精灵","id":"066"},
+            {"nickname":"Love","parallelJob":"爱意传递者","id":"067"},
+            {"nickname":"Peace","parallelJob":"和平守护者","id":"068"},
+            {"nickname":"Faith","parallelJob":"信念支撑者","id":"069"},
+            {"nickname":"Grace","parallelJob":"优雅设计师","id":"070"},
+            {"nickname":"晨曦微露","parallelJob":"黎明画家","id":"071"},
+            {"nickname":"清风徐来","parallelJob":"微风使者","id":"072"},
+            {"nickname":"星光点点","parallelJob":"星空点缀师","id":"073"},
+            {"nickname":"月色朦胧","parallelJob":"月光诗人","id":"074"},
+            {"nickname":"花香四溢","parallelJob":"花香调配师","id":"075"},
+            {"nickname":"细雨绵绵","parallelJob":"雨滴作家","id":"076"},
+            {"nickname":"枫叶飘零","parallelJob":"落叶舞者","id":"077"},
+            {"nickname":"雪花纷飞","parallelJob":"雪晶艺术家","id":"078"},
+            {"nickname":"海浪轻拍","parallelJob":"海洋诗人","id":"079"},
+            {"nickname":"山峦叠嶂","parallelJob":"山峰观察者","id":"080"},
+            {"nickname":"星尘","parallelJob":"宇宙尘埃收集者","id":"081"},
+            {"nickname":"光年","parallelJob":"时间旅行者","id":"082"},
+            {"nickname":"银河","parallelJob":"星河摆渡人","id":"083"},
+            {"nickname":"彗星","parallelJob":"流星许愿师","id":"084"},
+            {"nickname":"陨石","parallelJob":"天外信使","id":"085"},
+            {"nickname":"极光","parallelJob":"北极光编织者","id":"086"},
+            {"nickname":"日食","parallelJob":"太阳化妆师","id":"087"},
+            {"nickname":"月食","parallelJob":"月亮遮纱人","id":"088"},
+            {"nickname":"流星雨","parallelJob":"许愿流星引路人","id":"089"},
+            {"nickname":"黑洞","parallelJob":"秘密收纳师","id":"090"},
+            {"nickname":"春日","parallelJob":"樱花绽放师","id":"091"},
+            {"nickname":"夏夜","parallelJob":"萤火虫点亮者","id":"092"},
+            {"nickname":"秋韵","parallelJob":"枫叶染色师","id":"093"},
+            {"nickname":"冬雪","parallelJob":"雪人建造师","id":"094"},
+            {"nickname":"四季","parallelJob":"季节轮换师","id":"095"},
+            {"nickname":"年轮","parallelJob":"时光雕刻师","id":"096"},
+            {"nickname":"潮汐","parallelJob":"海浪节奏师","id":"097"},
+            {"nickname":"晨曦","parallelJob":"黎明唤醒师","id":"098"},
+            {"nickname":"暮色","parallelJob":"黄昏摄影师","id":"099"},
+            {"nickname":"永恒","parallelJob":"瞬间定格师","id":"100"}
+        ];
+
+        // 漂浮寄语数据
+        const sampleMessages = [
+            "慢慢来，比较快", "别怕，他在未来等你", "你比想象中更勇敢",
+            "今天也辛苦啦", "明天会更好", "你值得被爱", "一切都会过去",
+            "相信自己的力量", "小确幸一直在", "微笑面对每一天", "世界因你而精彩",
+            "给自己一个拥抱", "风雨过后是彩虹", "你真的很棒", "温柔对待自己",
+            "每一步都算数", "爱自己是终身浪漫", "阳光总在风雨后", "你的努力有意义",
+            "慢慢来不着急", "你比星光闪耀", "美好的事情即将发生", "做自己就好",
+            "今天也很可爱", "愿你被温柔以待", "向前走不回头", "你的存在很重要",
+            "相信美好会降临", "每一天都是新的", "你是独一无二的", "小小的进步也值得庆祝",
+            "生活有光也有你", "今天也要元气满满", "困难只是暂时的", "你已经做得很好了",
+            "未来可期", "心怀希望永不放弃", "你的笑容很治愈", "坚持就是胜利",
+            "善良的人会有好运", "明天又是新的一天", "你值得所有美好", "相信直觉相信爱",
+            "一切都是最好的安排", "你的努力终将绽放", "保持热爱奔赴山海",
+            "心若向阳无畏悲伤", "每一刻都值得珍惜", "愿你平安喜乐"
+        ];
+
+        let currentPage = 'home';
+        let selectedEmotion = '';
+        let currentCards = [];
+        let completedCards = [];
+
+        const container = document.getElementById('container');
+        const particlesContainer = document.getElementById('particles');
+        const messagesWall = document.getElementById('messages-wall');
+
+        function initParticles() {
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 8 + 's';
+                particle.style.animationDuration = (6 + Math.random() * 4) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        function getStoredData(key, defaultValue) {
+            try {
+                const data = localStorage.getItem(key);
+                return data ? JSON.parse(data) : defaultValue;
+            } catch { return defaultValue; }
+        }
+
+        function storeData(key, value) {
+            localStorage.setItem(key, JSON.stringify(value));
+        }
+
+        function getStats() {
+            return {
+                drawCount: getStoredData('drawCount', 0),
+                completeCount: getStoredData('completeCount', 0),
+                posterCount: getStoredData('posterCount', 0),
+                participants: getStoredData('participants', Math.floor(1000 + Math.random() * 5000))
+            };
+        }
+
+        function updateStats(type) {
+            const stats = getStats();
+            if (type === 'draw') stats.drawCount++;
+            else if (type === 'complete') stats.completeCount++;
+            else if (type === 'poster') stats.posterCount++;
+            storeData('drawCount', stats.drawCount);
+            storeData('completeCount', stats.completeCount);
+            storeData('posterCount', stats.posterCount);
+            return stats;
+        }
+
+        /**
+         * 检查是否应该启用深夜模式（22:00 - 6:00）
+         * @returns {boolean} - 是否为深夜模式时间
+         */
+        function isNightMode() {
+            const hour = new Date().getHours();
+            return hour >= 22 || hour < 6;
+        }
+
+        /**
+         * 切换深夜模式
+         * @param {boolean} enable - 是否启用深夜模式
+         */
+        function toggleNightMode(enable) {
+            const body = document.body;
+            const container = document.getElementById('container');
+            const nav = document.querySelector('nav');
+            
+            if (enable) {
+                body.classList.add('night-mode');
+                container.classList.add('night-mode');
+                if (nav) nav.classList.add('night-mode');
+            } else {
+                body.classList.remove('night-mode');
+                container.classList.remove('night-mode');
+                if (nav) nav.classList.remove('night-mode');
+            }
+        }
+
+        /**
+         * 初始化深夜模式
+         */
+        function initNightMode() {
+            toggleNightMode(isNightMode());
+            
+            // 设置定时器每小时检查一次
+            setInterval(() => {
+                toggleNightMode(isNightMode());
+            }, 60 * 60 * 1000);
+        }
+
+        /**
+         * 数字动态滚动动画
+         * @param {HTMLElement} element - 目标元素
+         * @param {number} target - 目标数字
+         * @param {number} duration - 动画时长（毫秒）
+         */
+        function animateNumber(element, target, duration = 1000) {
+            const start = 0;
+            const startTime = performance.now();
+            
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                // 使用缓动函数
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+                const current = Math.floor(start + (target - start) * easeOut);
+                
+                element.textContent = current;
+                
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                }
+            }
+            
+            requestAnimationFrame(update);
+        }
+
+        function renderHome() {
+            const stats = getStats();
+            const drawProgress = Math.min(stats.drawCount / 10 * 100, 100);
+            const completeProgress = Math.min(stats.completeCount / 5 * 100, 100);
+            const posterProgress = Math.min(stats.posterCount / 3 * 100, 100);
+            
+            container.innerHTML = `
+                <div class="home-page">
+                    ${createPageHeader('🏠 首页')}
+                    <h1 class="home-title">平行世界情绪驿站</h1>
+                    <p class="home-subtitle">在这里，找到属于你的温柔时刻</p>
+                    <button class="start-btn" onclick="goToEmotionPage()">开始探索</button>
+                    <div style="margin-top: 60px;">
+                        <p style="font-size: 14px; color: #8d7a9e; text-align: center;">
+                            已有 <span style="font-weight: bold; color: #5d4e6d;">${stats.participants}</span> 位同学参与
+                        </p>
+                        <div style="display: flex; justify-content: center; gap: 30px; margin-top: 20px;">
+                            <div style="text-align:center;">
+                                <p style="font-size: 24px; font-weight: bold; color: #5d4e6d;" id="stat-draw">0</p>
+                                <p style="font-size: 12px; color: #8d7a9e;">抽卡次数</p>
+                                <div class="progress-bar"><div class="progress-fill" style="width: ${drawProgress}%"></div></div>
+                            </div>
+                            <div style="text-align:center;">
+                                <p style="font-size: 24px; font-weight: bold; color: #5d4e6d;" id="stat-complete">0</p>
+                                <p style="font-size: 12px; color: #8d7a9e;">完成挑战</p>
+                                <div class="progress-bar"><div class="progress-fill" style="width: ${completeProgress}%"></div></div>
+                            </div>
+                            <div style="text-align:center;">
+                                <p style="font-size: 24px; font-weight: bold; color: #5d4e6d;" id="stat-poster">0</p>
+                                <p style="font-size: 12px; color: #8d7a9e;">生成海报</p>
+                                <div class="progress-bar"><div class="progress-fill" style="width: ${posterProgress}%"></div></div>
+                            </div>
+                        </div>
+                        <div style="text-align: center; margin-top: 20px;">
+                            ${stats.completeCount >= 1 ? '<span class="achievement">初次挑战</span>' : ''}
+                            ${stats.completeCount >= 3 ? '<span class="achievement">坚持不懈</span>' : ''}
+                            ${stats.posterCount >= 1 ? '<span class="achievement">身份卡收集</span>' : ''}
+                            ${stats.drawCount >= 5 ? '<span class="achievement">故事探索者</span>' : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+            initMessagesWall();
+            
+            // 启动数字滚动动画
+            setTimeout(() => {
+                animateNumber(document.getElementById('stat-draw'), stats.drawCount);
+                animateNumber(document.getElementById('stat-complete'), stats.completeCount);
+                animateNumber(document.getElementById('stat-poster'), stats.posterCount);
+            }, 300);
+        }
+
+        function renderEmotionPage() {
+            const emotions = [
+                { name: '开心', icon: '😊' },
+                { name: '焦虑', icon: '😰' },
+                { name: '疲惫', icon: '😴' },
+                { name: '迷茫', icon: '😶' },
+                { name: '兴奋', icon: '🤩' }
+            ];
+            container.innerHTML = `
+                ${createPageHeader('🧩 心情卡片', true)}
+                <div class="emotion-page">
+                    <h2 class="page-title">现在的你，心情如何？</h2>
+                    <div class="emotion-grid">
+                        ${emotions.map(e => `
+                            <div class="emotion-card ${selectedEmotion === e.name ? 'selected' : ''}" onclick="selectEmotion('${e.name}')">
+                                <div class="emotion-icon">${e.icon}</div>
+                                <div class="emotion-name">${e.name}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <button class="start-btn" style="width: 100%; margin-top: 30px;" onclick="goToCardsPage()" 
+                        ${!selectedEmotion ? 'disabled style="opacity: 0.5; cursor: not-allowed;"' : ''}>
+                        抽取我的故事卡片
+                    </button>
+                </div>
+            `;
+        }
+
+        function selectEmotion(emotion) {
+            selectedEmotion = emotion;
+            renderEmotionPage();
+        }
+
+        function getRandomStories(emotion, count = 3) {
+            const filtered = stories.filter(s => s.emotion === emotion);
+            const shuffled = [...filtered].sort(() => Math.random() - 0.5);
+            return shuffled.slice(0, count);
+        }
+
+        function getEmotionColor(emotion) {
+            const colors = { '开心': '#ffb6c1', '焦虑': '#87ceeb', '疲惫': '#dda0dd', '迷茫': '#98fb98', '兴奋': '#add8e6' };
+            return colors[emotion] || '#cccccc';
+        }
+
+        /**
+         * 根据心情状态获取小行动建议
+         */
+        function getSmallAction(emotion) {
+            const actions = {
+                '开心': ['给自己一个微笑', '和朋友分享喜悦', '记录今天的美好瞬间', '做一件让自己更开心的事'],
+                '焦虑': ['深呼吸3次', '站起来伸展一下', '喝杯温开水', '听一首轻音乐'],
+                '疲惫': ['小憩10分钟', '看看窗外风景', '起来走动走动', '给眼睛休息一下'],
+                '迷茫': ['写下一件今天想做的事', '给未来的自己一句话', '整理一下桌面', '列出3件感恩的事'],
+                '兴奋': ['分享给身边的朋友', '用文字记录此刻心情', '做深呼吸平静一下', '把能量传递给别人']
+            };
+            const list = actions[emotion] || actions['开心'];
+            return list[Math.floor(Math.random() * list.length)];
+        }
+
+        // 获取卡片抽取人数统计
+        function getCardDrawCount(cardText) {
+            const cardCounts = getStoredData('cardCounts', {});
+            return cardCounts[cardText] ? cardCounts[cardText] : Math.floor(Math.random() * 100) + 10;
+        }
+
+        // 更新卡片抽取人数
+        function updateCardDrawCount(cardText) {
+            const cardCounts = getStoredData('cardCounts', {});
+            cardCounts[cardText] = (cardCounts[cardText] || 0) + 1;
+            storeData('cardCounts', cardCounts);
+            return cardCounts[cardText];
+        }
+
+        function renderCardsPage() {
+            currentCards = getRandomStories(selectedEmotion, 3);
+            updateStats('draw');
+            
+            // 更新每张卡片的抽取次数
+            currentCards.forEach(card => {
+                updateCardDrawCount(card.text);
+            });
+            
+            container.innerHTML = `
+                ${createPageHeader('🧩 心情卡片', true)}
+                <div class="cards-page">
+                    <h2 class="page-title">${selectedEmotion}的平行世界</h2>
+                    <p style="text-align: center; color: #8d7a9e; margin-bottom: 20px;">点击卡片查看故事</p>
+                    <div class="cards-container">
+                        ${currentCards.map((card, index) => {
+                            const drawCount = getCardDrawCount(card.text);
+                            return `
+                            <div class="card-wrapper">
+                                <div class="card-sparkles" id="sparkles-${index}"></div>
+                                <div class="card" id="card-${index}" onclick="flipCard(${index})">
+                                    <div class="card-back">
+                                        <div class="card-back-icon">📖</div>
+                                        <div class="card-back-text">点击翻开卡片</div>
+                                    </div>
+                                    <div class="card-front">
+                                        <span class="emotion-tag" style="background: ${getEmotionColor(card.emotion)}">${card.emotion}</span>
+                                        <p class="story-text">${card.text}</p>
+                                        <div class="challenge-box">
+                                            <div class="challenge-label">🌱 温柔挑战</div>
+                                            <div class="challenge-text">${card.challenge}</div>
+                                        </div>
+                                        <div style="margin-top: 8px; font-size: 11px; color: #667eea; text-align: center;">
+                                            💡 小行动：${getSmallAction(card.emotion)}
+                                        </div>
+                                        <!-- 伪社交统计 -->
+                                        <div style="margin-top: 8px; font-size: 12px; color: #8d7a9e; text-align: center;">
+                                            💫 此刻有 <span style="font-weight: bold; color: #5d4e6d;">${drawCount}</span> 个灵魂也在读这个故事
+                                        </div>
+                                        <button class="complete-btn" id="complete-btn-${index}" 
+                                            onclick="event.stopPropagation(); completeChallenge(${index})">完成挑战</button>
+                                    </div>
+                                </div>
+                            </div>
+                            `;
+                        }).join('')}
+                    </div>
+                    <!-- 用户输入寄语区域 -->
+                    <div class="message-input-area" style="margin-top: 30px; background: white; border-radius: 15px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                        <p style="font-size: 14px; color: #5d4e6d; margin-bottom: 10px;">💌 留下你的温暖寄语</p>
+                        <!-- 渐变情绪条 -->
+                        <div class="mood-bar-container">
+                            <div class="mood-bar" id="mood-bar"></div>
+                            <div class="mood-labels">
+                                <span>😔</span>
+                                <span>😐</span>
+                                <span>😊</span>
+                                <span>😄</span>
+                            </div>
+                        </div>
+                        <input type="text" id="user-message-input" placeholder="输入你想说的话..." 
+                            style="width: 100%; padding: 12px; border: 2px solid #e9ecef; border-radius: 10px; font-size: 14px; outline: none; margin-bottom: 10px; margin-top: 10px;"
+                            maxlength="50" oninput="updateMoodBar(this.value)">
+                        <button class="btn btn-primary" style="width: 100%; padding: 12px;" onclick="submitMessage()">
+                            让寄语漂浮起来 ✨
+                        </button>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-primary" onclick="goToCardsPage()">再抽一次</button>
+                        <button class="btn btn-secondary" onclick="goToHome()">返回首页</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function flipCard(index) {
+            const card = document.getElementById(`card-${index}`);
+            const sparklesContainer = document.getElementById(`sparkles-${index}`);
+            
+            if (card) {
+                card.classList.toggle('flipped');
+                
+                // 如果卡片正在翻开，创建闪光效果
+                if (card.classList.contains('flipped')) {
+                    createSparkles(sparklesContainer);
+                }
+            }
+        }
+
+        // 创建闪光微粒效果
+        function createSparkles(container) {
+            if (!container) return;
+            
+            // 清除之前的闪光
+            container.innerHTML = '';
+            
+            // 创建多个闪光粒子
+            for (let i = 0; i < 12; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.left = (Math.random() * 100) + '%';
+                sparkle.style.top = (Math.random() * 100) + '%';
+                sparkle.style.animationDelay = (Math.random() * 0.3) + 's';
+                sparkle.style.animationDuration = (0.5 + Math.random() * 0.3) + 's';
+                container.appendChild(sparkle);
+            }
+            
+            // 3秒后清除闪光
+            setTimeout(() => {
+                container.innerHTML = '';
+            }, 3000);
+        }
+
+        // 用户提交寄语
+        /**
+         * 根据输入内容更新情绪条（关键词识别）
+         */
+        function updateMoodBar(text) {
+            const moodBar = document.getElementById('mood-bar');
+            if (!moodBar) return;
+            
+            // 情绪关键词列表
+            const positiveWords = ['开心', '快乐', '幸福', '高兴', '喜欢', '爱', '美好', '温暖', '阳光', '微笑', '感谢', '加油', '棒', '赞'];
+            const negativeWords = ['难过', '悲伤', '痛苦', '焦虑', '烦躁', '郁闷', '孤独', '失落', '迷茫', '害怕', '担心', '紧张'];
+            
+            let score = 50; // 中性分数
+            
+            // 统计正面关键词
+            positiveWords.forEach(word => {
+                if (text.includes(word)) score += 10;
+            });
+            
+            // 统计负面关键词
+            negativeWords.forEach(word => {
+                if (text.includes(word)) score -= 10;
+            });
+            
+            // 限制分数范围
+            score = Math.max(0, Math.min(100, score));
+            
+            // 更新情绪条显示（通过背景位置模拟填充效果）
+            const hue = (score / 100) * 120; // 从红色到绿色
+            moodBar.style.background = `linear-gradient(90deg, hsl(${hue}, 70%, 60%) ${score}%, #e9ecef ${score}%)`;
+        }
+
+        function submitMessage() {
+            const input = document.getElementById('user-message-input');
+            const message = input.value.trim();
+            
+            if (!message) {
+                alert('请输入你的寄语~');
+                return;
+            }
+            
+            // 创建漂浮消息元素
+            const messageItem = document.createElement('div');
+            messageItem.className = 'message-item';
+            messageItem.textContent = message;
+            messageItem.style.top = (Math.random() * 60 + 10) + '%';
+            messageItem.style.animationDelay = '0s';
+            messageItem.style.animationDuration = (10 + Math.random() * 10) + 's';
+            messageItem.style.color = '#5d4e6d';
+            messageItem.style.fontWeight = 'bold';
+            
+            messagesWall.appendChild(messageItem);
+            
+            // 清空输入框
+            input.value = '';
+            
+            // 提示成功
+            alert('你的寄语已放飞~ ✨');
+        }
+
+        function completeChallenge(index) {
+            const btn = document.getElementById(`complete-btn-${index}`);
+            if (btn && !btn.classList.contains('completed')) {
+                btn.classList.add('completed');
+                btn.textContent = '✓ 已完成';
+                updateStats('complete');
+                showCelebration();
+            }
+        }
+
+        function showCelebration() {
+            const confettiContainer = document.createElement('div');
+            confettiContainer.className = 'confetti';
+            for (let i = 0; i < 30; i++) {
+                const piece = document.createElement('div');
+                piece.className = 'confetti-piece';
+                piece.style.left = Math.random() * 100 + '%';
+                piece.style.backgroundColor = ['#ffb7b2', '#84fab0', '#8fd3f4', '#ffecd2'][Math.floor(Math.random() * 4)];
+                piece.style.animationDelay = Math.random() * 0.5 + 's';
+                piece.style.width = (8 + Math.random() * 8) + 'px';
+                piece.style.height = piece.style.width;
+                confettiContainer.appendChild(piece);
+            }
+            document.body.appendChild(confettiContainer);
+            setTimeout(() => confettiContainer.remove(), 2000);
+        }
+
+        function renderPosterPage() {
+            container.innerHTML = `
+                ${createPageHeader('🎨 平行世界', true)}
+                <div class="poster-page">
+                    <h2 class="page-title">生成你的平行身份卡</h2>
+                    <div class="input-group">
+                        <label class="input-label">输入你的昵称</label>
+                        <input type="text" class="input-field" id="nickname-input" placeholder="请输入昵称">
+                    </div>
+                    <button class="generate-btn" onclick="generatePoster()">生成身份卡</button>
+                    <div id="poster-container"></div>
+                </div>
+            `;
+        }
+
+        // 获取今天的日期字符串（格式：YYYY-MM-DD）
+        function getTodayString() {
+            const today = new Date();
+            return today.getFullYear() + '-' + 
+                   String(today.getMonth() + 1).padStart(2, '0') + '-' + 
+                   String(today.getDate()).padStart(2, '0');
+        }
+
+        /**
+         * 获取用户今日的身份信息（每天只生成一次，支持多昵称隔离）
+         * @param {string} nickname - 用户昵称
+         * @returns {Object} - 身份信息对象 {nickname, parallelJob, id}
+         */
+        function getTodayIdentity(nickname) {
+            // 从localStorage获取所有用户的身份信息（存储格式：{ "nickname1": {date, identity}, "nickname2": {...} }）
+            const allIdentities = getStoredData('identityStorage', {});
+            
+            const today = getTodayString();
+            // 使用昵称作为key，支持多个昵称独立存储
+            const nicknameKey = nickname || 'anonymous';
+            
+            // 检查该昵称今天是否已有身份
+            const storedData = allIdentities[nicknameKey];
+            if (storedData && storedData.date === today) {
+                // 今天已有身份，直接返回
+                return storedData.identity;
+            }
+            
+            // 生成新身份
+            const randomJob = parallelJobs[Math.floor(Math.random() * parallelJobs.length)];
+            const newId = Math.floor(1000 + Math.random() * 9000).toString();
+            
+            const newIdentity = {
+                nickname: nickname,
+                parallelJob: randomJob.parallelJob,
+                id: newId
+            };
+            
+            // 保存该昵称的身份信息（不影响其他昵称）
+            allIdentities[nicknameKey] = {
+                date: today,
+                identity: newIdentity
+            };
+            storeData('identityStorage', allIdentities);
+            
+            return newIdentity;
+        }
+
+        /**
+         * 生成身份卡片的HTML页面内容（用于二维码）
+         * @param {Object} identity - 身份信息
+         * @returns {string} - HTML字符串
+         */
+        function generateIdentityHtml(identity) {
+            return `
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的平行身份</title>
+    <style>
+        body { min-height: 100vh; background: linear-gradient(135deg, #fdf6e3 0%, #fce4ec 50%, #e8f5e9 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+        .card { background: white; border-radius: 20px; padding: 40px 30px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.1); max-width: 300px; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; padding: 30px 20px; color: white; margin-bottom: 20px; }
+        .id { font-size: 12px; opacity: 0.8; margin-bottom: 10px; }
+        .job { font-size: 26px; font-weight: bold; margin-bottom: 15px; }
+        .name { font-size: 18px; opacity: 0.9; }
+        .footer { font-size: 12px; color: #8d7a9e; margin-top: 20px; }
+        .emoji { font-size: 60px; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+    <div class="card"><div class="emoji">🌟</div><div class="header"><div class="id">ID: ${identity.id}</div><div class="job">${identity.parallelJob}</div><div class="name">${identity.nickname}</div></div><div class="footer">平行世界情绪驿站 · 专属身份</div></div>
+</body>
+</html>
+            `.replace(/\n/g, '');
+        }
+
+        /**
+         * 使用QRCode.js生成二维码图片（固定尺寸200x200）
+         * @param {string} content - 二维码内容（建议使用短文本）
+         * @param {string} canvasId - 目标canvas元素ID
+         */
+        function renderQRCode(content, canvasId) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            
+            // 清空canvas
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // 使用QRCode.js库生成二维码
+            // 设置固定尺寸300x300，确保二维码足够大且清晰
+            QRCode.toCanvas(canvas, content, {
+                width: 300,  // 增加尺寸到300px，提高扫描成功率
+                margin: 6,   // 增加边距
+                color: {
+                    dark: '#000000',  // 纯黑色
+                    light: '#ffffff'  // 纯白色
+                },
+                errorCorrectionLevel: 'H'  // 高容错级别，确保即使部分损坏也能扫描
+            }, function (error) {
+                if (error) {
+                    console.error('QR Code生成失败:', error);
+                }
+            });
+        }
+
+        /**
+         * 构建身份卡展示页面的URL
+         * @param {Object} identity - 身份信息
+         * @returns {string} - 完整的URL地址
+         */
+        function buildIdentityUrl(identity) {
+            // 使用GitHub Pages地址作为基础URL
+            const baseUrl = 'https://sxy12345610.github.io/index.html';
+            
+            // 直接拼接参数，中文使用encodeURIComponent编码一次
+            return `${baseUrl}?nickname=${encodeURIComponent(identity.nickname)}&id=${identity.id}&job=${encodeURIComponent(identity.parallelJob)}`;
+        }
+
+        /**
+         * 生成二维码内容（使用URL格式，确保微信可识别）
+         * @param {Object} identity - 身份信息
+         * @returns {string} - 二维码URL内容
+         */
+        function generateQRContent(identity) {
+            // 直接返回URL
+            return buildIdentityUrl(identity);
+        }
+
+        /**
+         * 显示/隐藏二维码
+         * @param {Object} identity - 身份信息
+         */
+        function toggleQRCode(identity) {
+            const qrContainer = document.getElementById('qr-container');
+            
+            if (!qrContainer) return;
+            
+            if (qrContainer.style.display === 'none' || qrContainer.style.display === '') {
+                // 生成简洁的二维码内容（纯文本格式）
+                const qrContent = generateQRContent(identity);
+                
+                // 使用QRCode.js生成二维码（固定200x200）
+                renderQRCode(qrContent, 'qr-canvas');
+                
+                qrContainer.style.display = 'flex';
+            } else {
+                qrContainer.style.display = 'none';
+            }
+        }
+
+        /**
+         * 生成身份海报
+         */
+        function generatePoster() {
+            const nickname = document.getElementById('nickname-input').value || '匿名';
+            
+            // 获取今日身份（每天只生成一次，支持多昵称隔离）
+            const identity = getTodayIdentity(nickname);
+            updateStats('poster');
+            
+            // 构建身份卡URL
+            const identityUrl = buildIdentityUrl(identity);
+            
+            document.getElementById('poster-container').innerHTML = `
+                <div class="poster-card" id="poster-card">
+                    <div class="poster-bg">
+                        <div class="poster-id">ID: ${identity.id}</div>
+                        <div class="poster-title">${identity.parallelJob}</div>
+                        <div class="poster-name">${identity.nickname}</div>
+                    </div>
+                    <!-- 日期提示 -->
+                    <div style="margin-top: 15px; font-size: 12px; color: #8d7a9e; text-align: center;">
+                        📅 今日身份已锁定，明天将刷新新身份
+                    </div>
+                    <!-- 二维码区域（默认隐藏，固定尺寸250x250） -->
+                    <div id="qr-container" style="margin-top: 20px; display: none; flex-direction: column; align-items: center;">
+                        <!-- canvas设置固定宽高250x250 -->
+                        <canvas id="qr-canvas" width="250" height="250" style="max-width: 250px; max-height: 250px; border-radius: 10px;"></canvas>
+                        <p style="font-size: 12px; color: #8d7a9e; margin-top: 10px;">📱 扫码查看你的平行身份</p>
+                    </div>
+                    <!-- 显示/隐藏二维码按钮 -->
+                    <button class="btn btn-secondary" style="margin-top: 20px;" onclick="toggleQRCode(${JSON.stringify(identity).replace(/"/g, '&quot;')})">
+                        显示二维码
+                    </button>
+                    <p style="font-size: 12px; color: #8d7a9e; margin-top: 15px;">平行世界情绪驿站 · 专属身份</p>
+                    <button class="btn save-btn" onclick="savePoster()">保存海报</button>
+                </div>
+            `;
+            
+            // 预先生成二维码
+            setTimeout(() => {
+                const canvas = document.getElementById('qr-canvas');
+                if (canvas) {
+                    QRCode.toCanvas(canvas, identityUrl, {
+                        width: 250,
+                        margin: 6,
+                        color: { dark: '#000000', light: '#ffffff' },
+                        errorCorrectionLevel: 'H'
+                    });
+                }
+            }, 100);
+        }
+
+        function savePoster() {
+            alert('海报已保存！请截图保存到相册~');
+        }
+
+        /**
+         * 判断设备类型（手机还是电脑）
+         * @returns {string} - 'mobile' 或 'desktop'
+         */
+        function getDeviceType() {
+            const userAgent = navigator.userAgent.toLowerCase();
+            const mobileKeywords = ['android', 'iphone', 'ipad', 'ipod', 'mobile', 'windows phone'];
+            const isMobile = mobileKeywords.some(keyword => userAgent.includes(keyword));
+            return isMobile ? 'mobile' : 'desktop';
+        }
+
+        /**
+         * 将海报转换为Canvas图片
+         * @returns {Promise<Canvas>} - 返回canvas元素
+         */
+        async function posterToCanvas() {
+            const posterCard = document.getElementById('poster-card');
+            if (!posterCard) {
+                throw new Error('海报元素不存在');
+            }
+
+            // 使用html2canvas将DOM转换为canvas
+            // 需要先引入html2canvas库
+            const canvas = await html2canvas(posterCard, {
+                backgroundColor: '#ffffff',
+                scale: 2, // 提高清晰度
+                useCORS: true,
+                logging: false
+            });
+
+            return canvas;
+        }
+
+        /**
+         * 保存海报到本地设备
+         */
+        /**
+         * 显示浮层提示
+         * @param {string} content - 提示内容（支持HTML）
+         * @param {number} duration - 显示时长（毫秒）
+         */
+        function showFloatTip(content, duration = 3000) {
+            // 移除已存在的浮层
+            const existing = document.querySelector('.float-tip');
+            if (existing) existing.remove();
+            
+            // 创建浮层
+            const tip = document.createElement('div');
+            tip.className = 'float-tip';
+            tip.innerHTML = content;
+            document.body.appendChild(tip);
+            
+            // 自动消失
+            setTimeout(() => {
+                tip.style.opacity = '0';
+                tip.style.transition = 'opacity 0.5s ease';
+                setTimeout(() => tip.remove(), 500);
+            }, duration);
+        }
+
+        /**
+         * 判断设备类型（手机还是电脑）
+         * @returns {string} - 'mobile' 或 'desktop'
+         */
+        function getDeviceType() {
+            const userAgent = navigator.userAgent.toLowerCase();
+            const mobileKeywords = ['android', 'iphone', 'ipad', 'ipod', 'mobile', 'windows phone'];
+            const isMobile = mobileKeywords.some(keyword => userAgent.includes(keyword));
+            return isMobile ? 'mobile' : 'desktop';
+        }
+
+        /**
+         * 保存海报到本地设备
+         * - 手机端：显示浮层提示"请长按图片保存到相册"，3秒后消失
+         * - 电脑端：弹出下载对话框
+         */
+        async function savePoster() {
+            const deviceType = getDeviceType();
+            
+            try {
+                // 获取海报元素
+                const posterCard = document.getElementById('poster-card');
+                if (!posterCard) {
+                    throw new Error('海报元素不存在');
+                }
+
+                // 使用html2canvas将身份卡DOM转换为canvas图片
+                const canvas = await html2canvas(posterCard, {
+                    backgroundColor: '#ffffff',
+                    scale: 2,
+                    useCORS: true,
+                    logging: false
+                });
+
+                // 将canvas转换为PNG图片数据
+                const dataUrl = canvas.toDataURL('image/png', 1.0);
+
+                // 创建下载链接并触发下载
+                const link = document.createElement('a');
+                const timestamp = new Date().getTime();
+                link.download = `平行身份卡_${timestamp}.png`;
+                link.href = dataUrl;
+                link.click();
+
+                // 根据设备类型显示不同提示
+                if (deviceType === 'mobile') {
+                    // 手机端：显示浮层提示，3秒后消失
+                    showFloatTip('🎉 海报已生成，请长按图片保存到相册', 3000);
+                } else {
+                    // 电脑端：弹窗提示
+                    alert('🎉 海报已保存，请在指定路径查看~');
+                }
+
+            } catch (error) {
+                console.error('保存失败:', error);
+                alert('保存失败，请尝试截图保存~');
+            }
+        }
+
+        /**
+         * 将海报转换为Canvas图片（用于保存）
+         */
+        async function posterToCanvas() {
+            const posterCard = document.getElementById('poster-card');
+            if (!posterCard) {
+                throw new Error('海报元素不存在');
+            }
+
+            const canvas = await html2canvas(posterCard, {
+                backgroundColor: '#ffffff',
+                scale: 2,
+                useCORS: true,
+                logging: false
+            });
+
+            return canvas;
+        }
+
+        function renderStatsPage() {
+            const stats = getStats();
+            const drawProgress = Math.min(stats.drawCount / 10 * 100, 100);
+            const completeProgress = Math.min(stats.completeCount / 5 * 100, 100);
+            const posterProgress = Math.min(stats.posterCount / 3 * 100, 100);
+            
+            container.innerHTML = `
+                ${createPageHeader('📊 我的旅程', true)}
+                <div class="stats-page">
+                    <div class="stat-item">
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                            <div class="stat-value">${stats.drawCount}</div>
+                            <span style="font-size:12px;color:#8d7a9e;">抽卡次数</span>
+                        </div>
+                        <div class="progress-bar"><div class="progress-fill" style="width:${drawProgress}%"></div></div>
+                    </div>
+                    <div class="stat-item">
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                            <div class="stat-value">${stats.completeCount}</div>
+                            <span style="font-size:12px;color:#8d7a9e;">完成挑战</span>
+                        </div>
+                        <div class="progress-bar"><div class="progress-fill" style="width:${completeProgress}%"></div></div>
+                    </div>
+                    <div class="stat-item">
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                            <div class="stat-value">${stats.posterCount}</div>
+                            <span style="font-size:12px;color:#8d7a9e;">生成海报</span>
+                        </div>
+                        <div class="progress-bar"><div class="progress-fill" style="width:${posterProgress}%"></div></div>
+                    </div>
+                    <div class="stat-item">
+                        <div style="display:flex;justify-content:space-between;align-items:center;">
+                            <div class="stat-value">${stats.participants}</div>
+                            <span style="font-size:12px;color:#8d7a9e;">参与同学</span>
+                        </div>
+                    </div>
+                    <div style="text-align:center;margin-top:20px;">
+                        <h3 style="font-size:14px;color:#5d4e6d;margin-bottom:10px;">🏅 成就徽章</h3>
+                        ${stats.completeCount >= 1 ? '<span class="achievement">初次挑战</span>' : ''}
+                        ${stats.completeCount >= 3 ? '<span class="achievement">坚持不懈</span>' : ''}
+                        ${stats.posterCount >= 1 ? '<span class="achievement">身份卡收集</span>' : ''}
+                        ${stats.drawCount >= 5 ? '<span class="achievement">故事探索者</span>' : ''}
+                        ${stats.completeCount >= 5 && stats.posterCount >= 1 ? '<span class="achievement">情绪大师</span>' : ''}
+                    </div>
+                    <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="goToHome()">返回首页</button>
+                </div>
+            `;
+        }
+
+        function initMessagesWall() {
+            messagesWall.innerHTML = '';
+            for (let i = 0; i < 8; i++) {
+                const message = sampleMessages[Math.floor(Math.random() * sampleMessages.length)];
+                const item = document.createElement('div');
+                item.className = 'message-item';
+                item.textContent = message;
+                item.style.top = (Math.random() * 60 + 10) + '%';
+                item.style.animationDelay = Math.random() * 15 + 's';
+                item.style.animationDuration = (12 + Math.random() * 8) + 's';
+                messagesWall.appendChild(item);
+            }
+        }
+
+        /**
+         * 更新底部导航高亮状态
+         */
+        function updateNavHighlight() {
+            document.querySelectorAll('nav button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            const activeBtn = document.getElementById('nav-' + currentPage);
+            if (activeBtn) {
+                activeBtn.classList.add('active');
+            }
+        }
+
+        /**
+         * 生成页面标题栏（带返回按钮）
+         * @param {string} title - 页面标题
+         * @param {boolean} showBack - 是否显示返回按钮
+         */
+        function createPageHeader(title, showBack = false) {
+            let html = '<div class="page-header">';
+            if (showBack) {
+                html += '<button class="page-header-back" onclick="goBack()">←</button>';
+            }
+            html += '<div class="page-header-title">' + title + '</div>';
+            html += '</div>';
+            return html;
+        }
+
+        function goBack() {
+            // 如果底部导航被隐藏（扫码结果页），则返回首页并显示导航
+            if (document.querySelector('nav').style.display === 'none') {
+                document.querySelector('nav').style.display = '';
+                window.location.href = 'https://sxy12345610.github.io/index.html';
+                return;
+            }
+            if (currentPage === 'cards') {
+                goToEmotionPage();
+            } else if (currentPage === 'poster' || currentPage === 'stats') {
+                goToHome();
+            } else {
+                goToHome();
+            }
+        }
+
+        /**
+         * 渲染扫码结果页面（扫码后显示身份信息）
+         */
+        function renderQRCodeResult() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const nickname = decodeURIComponent(urlParams.get('nickname') || '匿名');
+            const job = decodeURIComponent(urlParams.get('job') || '神秘旅人');
+            const id = urlParams.get('id') || '----';
+            
+            container.innerHTML = `
+                <div style="padding-top: 40px;">
+                    ${createPageHeader('🎨 平行世界', true)}
+                    <div class="poster-card" id="poster-card">
+                        <div class="poster-bg">
+                            <div class="poster-id">ID: ${id}</div>
+                            <div class="poster-title">${job}</div>
+                            <div class="poster-name">${nickname}</div>
+                        </div>
+                        <div class="footer" style="margin-top: 20px;">平行世界情绪驿站 · 专属身份</div>
+                        <div style="margin-top: 15px; font-size: 12px; color: #8d7a9e; text-align: center;">
+                            📅 今日身份已锁定，明天将刷新新身份
+                        </div>
+                    </div>
+                    <p style="font-size: 14px; color: #5d4e6d; text-align: center; margin-top: 20px;">
+                        🏠 <a href="https://sxy12345610.github.io/index.html" style="color: #667eea;">返回首页探索更多</a>
+                    </p>
+                </div>
+            `;
+            // 隐藏底部导航（扫码结果页不需要）
+            document.querySelector('nav').style.display = 'none';
+        }
+
+        /**
+         * 页面切换函数 - 带左右滑动动画
+         */
+        function goToHome() { 
+            currentPage = 'home'; 
+            updateNavHighlight(); 
+            animatePageTransition(renderHome); 
+        }
+        function goToEmotionPage() { 
+            currentPage = 'emotion'; 
+            updateNavHighlight(); 
+            animatePageTransition(renderEmotionPage); 
+        }
+        function goToCardsPage() { 
+            if (!selectedEmotion) return; 
+            currentPage = 'cards'; 
+            updateNavHighlight(); 
+            animatePageTransition(renderCardsPage); 
+        }
+        function goToPosterPage() { 
+            currentPage = 'poster'; 
+            updateNavHighlight(); 
+            animatePageTransition(renderPosterPage); 
+        }
+        function goToStatsPage() { 
+            currentPage = 'stats'; 
+            updateNavHighlight(); 
+            animatePageTransition(renderStatsPage); 
+        }
+
+        /**
+         * 页面切换动画
+         * @param {function} renderFunc - 渲染函数
+         */
+        function animatePageTransition(renderFunc) {
+            const container = document.getElementById('container');
+            container.classList.add('page-transition');
+            
+            setTimeout(() => {
+                renderFunc();
+                container.classList.remove('page-transition');
+            }, 250);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initParticles();
+            // 初始化深夜模式
+            initNightMode();
+            // 检查URL参数，如果有扫码参数则显示身份信息
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('nickname') && urlParams.has('job') && urlParams.has('id')) {
+                renderQRCodeResult();
+            } else {
+                renderHome();
+            }
+        });
+    </script>
+</body>
+</html>

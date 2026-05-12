@@ -2,8 +2,12 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>我的平行身份</title>
+    <!-- 引入html2canvas库用于生成海报图片 -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -13,13 +17,14 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 20px 15px;
             font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            -webkit-overflow-scrolling: touch;
         }
         .card {
             background: white;
             border-radius: 20px;
-            padding: 40px 30px;
+            padding: 40px 25px;
             text-align: center;
             box-shadow: 0 10px 40px rgba(0,0,0,0.1);
             max-width: 320px;
@@ -60,10 +65,43 @@
             font-size: 14px;
             color: #bbb;
         }
+        .save-btn {
+            margin-top: 25px;
+            padding: 14px 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 320px;
+        }
+        .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+        }
+        .save-btn:active {
+            transform: translateY(0);
+        }
+        .save-tip {
+            margin-top: 15px;
+            padding: 12px 20px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 12px;
+            font-size: 14px;
+            color: #667eea;
+            text-align: center;
+            max-width: 320px;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
-    <div class="card">
+    <div class="card" id="poster-card">
         <div class="emoji">🌟</div>
         <div class="header">
             <div class="id" id="identity-id">ID: --</div>
@@ -72,10 +110,21 @@
         </div>
         <div class="footer">平行世界情绪驿站 · 专属身份</div>
     </div>
+
+    <!-- 保存按钮 -->
+    <button class="save-btn" id="save-btn" onclick="savePoster()">
+        💾 保存海报
+    </button>
+
+    <!-- 保存提示 -->
+    <div class="save-tip" id="save-tip"></div>
+
     <div class="logo">🌌 平行世界情绪驿站</div>
 
     <script>
-        // 从URL参数获取身份信息
+        /**
+         * 从URL参数获取身份信息
+         */
         function getUrlParams() {
             const params = {};
             const urlParams = new URLSearchParams(window.location.search);
@@ -85,7 +134,9 @@
             return params;
         }
 
-        // 显示身份信息
+        /**
+         * 显示身份信息
+         */
         function displayIdentity() {
             const params = getUrlParams();
             const nickname = params.nickname || '匿名';
@@ -97,8 +148,83 @@
             document.getElementById('identity-name').textContent = nickname;
         }
 
-        // 页面加载完成后显示身份信息
-        document.addEventListener('DOMContentLoaded', displayIdentity);
+        /**
+         * 判断设备类型（手机还是电脑）
+         * @returns {string} - 'mobile' 或 'desktop'
+         */
+        function getDeviceType() {
+            const userAgent = navigator.userAgent.toLowerCase();
+            const mobileKeywords = ['android', 'iphone', 'ipad', 'ipod', 'mobile', 'windows phone'];
+            const isMobile = mobileKeywords.some(keyword => userAgent.includes(keyword));
+            return isMobile ? 'mobile' : 'desktop';
+        }
+
+        /**
+         * 更新保存提示文字
+         */
+        function updateSaveTip() {
+            const deviceType = getDeviceType();
+            const tipElement = document.getElementById('save-tip');
+
+            if (deviceType === 'mobile') {
+                tipElement.textContent = '📱 点击上方按钮，海报将保存到相册';
+            } else {
+                tipElement.textContent = '💻 点击上方按钮，选择保存路径下载海报';
+            }
+        }
+
+        /**
+         * 保存海报到本地设备
+         */
+        async function savePoster() {
+            const deviceType = getDeviceType();
+
+            try {
+                const posterCard = document.getElementById('poster-card');
+                if (!posterCard) {
+                    throw new Error('海报元素不存在');
+                }
+
+                // 使用html2canvas将身份卡DOM转换为canvas图片
+                const canvas = await html2canvas(posterCard, {
+                    backgroundColor: '#ffffff',
+                    scale: 2,
+                    useCORS: true,
+                    logging: false
+                });
+
+                // 将canvas转换为PNG图片数据
+                const dataUrl = canvas.toDataURL('image/png', 1.0);
+
+                // 创建下载链接并触发下载
+                const link = document.createElement('a');
+                const timestamp = new Date().getTime();
+                link.download = `平行身份卡_${timestamp}.png`;
+                link.href = dataUrl;
+                link.click();
+
+                // 根据设备类型显示不同提示
+                if (deviceType === 'mobile') {
+                    setTimeout(function () {
+                        alert('🎉 海报已保存，请在相册查看~');
+                    }, 500);
+                } else {
+                    alert('🎉 海报已保存，请在指定路径查看~');
+                }
+
+            } catch (error) {
+                console.error('保存失败:', error);
+                alert('保存失败，请尝试截图保存~');
+            }
+        }
+
+        /**
+         * 页面加载完成后执行
+         */
+        document.addEventListener('DOMContentLoaded', function () {
+            displayIdentity();
+            updateSaveTip();
+        });
     </script>
 </body>
 </html>
