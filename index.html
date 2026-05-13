@@ -50,6 +50,605 @@
             90% { opacity: 1; }
             100% { transform: translateY(-100vh) translateX(100px); opacity: 0; }
         }
+        /* 登录页面样式 */
+        .login-page { 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 40px 20px;
+            padding-bottom: 60px;
+        }
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .login-logo {
+            font-size: 70px;
+            margin-bottom: 15px;
+            animation: floatLogo 3s ease-in-out infinite;
+        }
+        @keyframes floatLogo {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .login-title {
+            font-size: 28px;
+            color: #5d4e6d;
+            margin-bottom: 8px;
+        }
+        .login-subtitle {
+            font-size: 14px;
+            color: #8d7a9e;
+        }
+        .login-card {
+            background: white;
+            border-radius: 24px;
+            padding: 30px;
+            width: 100%;
+            max-width: 380px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+        }
+        .login-step {
+            display: none;
+        }
+        .login-step.active {
+            display: block;
+        }
+        .step-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .login-card .back-btn {
+            background: none !important;
+            border: none !important;
+            color: #8d7a9e !important;
+            font-size: 16px !important;
+            cursor: pointer;
+            padding: 5px 10px !important;
+            border-radius: 8px !important;
+            transition: all 0.3s ease;
+            width: auto !important;
+            height: auto !important;
+            position: static !important;
+            box-shadow: none !important;
+            display: inline-flex !important;
+            align-items: center;
+            gap: 4px;
+        }
+        .login-card .back-btn:hover {
+            background: rgba(141, 122, 158, 0.1) !important;
+            color: #5d4e6d !important;
+        }
+        .step-title {
+            font-size: 18px;
+            color: #5d4e6d;
+            text-align: center;
+            flex: 1;
+            margin: 0;
+        }
+        .step-desc {
+            font-size: 13px;
+            color: #8d7a9e;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .login-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .login-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 18px;
+            border: none;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .login-btn:hover {
+            transform: translateY(-2px);
+        }
+        .phone-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .wechat-btn {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            color: #5d4e6d;
+        }
+        .login-icon {
+            font-size: 24px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-label {
+            display: block;
+            font-size: 14px;
+            color: #5d4e6d;
+            margin-bottom: 10px;
+        }
+        .form-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+        .form-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        .form-hint {
+            font-size: 12px;
+            color: #8d7a9e;
+            margin-top: 8px;
+        }
+        .send-code-btn {
+            float: right;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            margin-top: -42px;
+            position: relative;
+            z-index: 1;
+            transition: all 0.3s ease;
+        }
+        .send-code-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        .send-code-btn:disabled {
+            background: #dfe6e9;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        .gender-options {
+            display: flex;
+            gap: 15px;
+        }
+        .gender-option {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .gender-option:hover {
+            border-color: #667eea;
+        }
+        .gender-option input[type="radio"] {
+            display: none;
+        }
+        .gender-option span {
+            font-size: 14px;
+            color: #5d4e6d;
+            margin-top: 5px;
+        }
+        .gender-option input[type="radio"]:checked + span {
+            color: #667eea;
+            font-weight: 600;
+        }
+        
+        /* 微信登录二维码样式 */
+        .wechat-qrcode-container {
+            text-align: center;
+            padding: 20px 0;
+        }
+        .qrcode-wrapper {
+            display: inline-block;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .qrcode-wrapper:hover {
+            transform: scale(1.05);
+        }
+        .qrcode {
+            width: 180px;
+            height: 180px;
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+        .qrcode-pattern {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(45deg, #34a853 25%, transparent 25%),
+                linear-gradient(-45deg, #34a853 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #34a853 75%),
+                linear-gradient(-45deg, transparent 75%, #34a853 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+            opacity: 0.3;
+        }
+        .qrcode-center {
+            width: 60px;
+            height: 60px;
+            background: #34a853;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+        }
+        .wechat-icon {
+            font-size: 32px;
+        }
+        .qrcode-hint {
+            margin-top: 15px;
+            font-size: 13px;
+            color: #8d7a9e;
+        }
+        .wechat-tip {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #5d4e6d;
+        }
+        .wechat-steps {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 25px;
+        }
+        .step-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        .step-num {
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            color: white;
+        }
+        .step-item span:last-child {
+            font-size: 12px;
+            color: #8d7a9e;
+        }
+        
+        /* 扫描动画 */
+        .scan-animation {
+            text-align: center;
+            padding: 30px 0;
+        }
+        .scan-icon {
+            font-size: 60px;
+            animation: bounce 1s ease-in-out infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        .scan-text {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #5d4e6d;
+        }
+        .scan-progress {
+            width: 80%;
+            height: 6px;
+            background: #e9ecef;
+            border-radius: 3px;
+            margin: 20px auto 0;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #34a853, #84fab0);
+            animation: progress 2s ease-out forwards;
+        }
+        @keyframes progress {
+            from { width: 0%; }
+            to { width: 100%; }
+        }
+        
+        /* 扫描成功 */
+        .scan-success {
+            text-align: center;
+            padding: 30px 0;
+        }
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #34a853 0%, #84fab0 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            font-size: 40px;
+            color: white;
+            animation: success-pop 0.5s ease-out;
+        }
+        @keyframes success-pop {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        .success-text {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #34a853;
+        }
+        .success-subtext {
+            margin-top: 8px;
+            font-size: 14px;
+            color: #8d7a9e;
+        }
+        
+        /* 短信通知样式 */
+        .sms-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border-radius: 16px;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            z-index: 9999;
+            animation: slideInRight 0.3s ease-out;
+            border-left: 4px solid #34a853;
+        }
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        .sms-icon {
+            font-size: 28px;
+        }
+        .sms-content {
+            flex: 1;
+        }
+        .sms-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #34a853;
+            margin: 0 0 4px 0;
+        }
+        .sms-desc {
+            font-size: 13px;
+            color: #8d7a9e;
+            margin: 0;
+        }
+        .sms-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #ccc;
+            cursor: pointer;
+            padding: 0 5px;
+            line-height: 1;
+            transition: color 0.3s ease;
+        }
+        .sms-close:hover {
+            color: #5d4e6d;
+        }
+        .sms-test {
+            font-size: 12px;
+            color: #ff768a;
+            margin: 4px 0 0 0;
+            background: #fff5f5;
+            padding: 4px 8px;
+            border-radius: 6px;
+            display: inline-block;
+            margin-top: 8px;
+        }
+        .code-highlight {
+            font-weight: bold;
+            font-size: 14px;
+            color: #e74c3c;
+        }
+        
+        .confirm-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #ffb7b2 0%, #ffecd2 100%);
+            color: #5d4e6d;
+            border: none;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        .confirm-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 183, 178, 0.4);
+        }
+        .privacy-info {
+            margin-top: 25px;
+            text-align: center;
+        }
+        .privacy-info p {
+            font-size: 12px;
+            color: #8d7a9e;
+        }
+
+        /* 个人中心页面样式 */
+        .profile-page { padding-top: 20px; padding-bottom: 30px; }
+        .profile-card {
+            background: linear-gradient(145deg, #667eea 0%, #764ba2 100%);
+            border-radius: 24px;
+            padding: 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 25px;
+            color: white;
+        }
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .avatar-emoji { font-size: 40px; }
+        .profile-info { flex: 1; }
+        .profile-name { font-size: 22px; font-weight: bold; margin-bottom: 5px; }
+        .profile-greeting { font-size: 14px; opacity: 0.9; margin-bottom: 10px; }
+        .profile-tags { display: flex; gap: 8px; }
+        .tag {
+            background: rgba(255,255,255,0.25);
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+        }
+        .section { margin-bottom: 25px; }
+        .section-title {
+            font-size: 16px;
+            color: #5d4e6d;
+            margin-bottom: 15px;
+            padding-left: 10px;
+        }
+        .emotion-chart-card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .chart-header {
+            font-size: 14px;
+            color: #5d4e6d;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .emotion-chart { margin-bottom: 20px; }
+        .chart-bar-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .chart-label { width: 40px; font-size: 13px; color: #5d4e6d; }
+        .chart-bar-container {
+            flex: 1;
+            height: 20px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .chart-bar {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+        .chart-percentage {
+            width: 45px;
+            font-size: 12px;
+            color: #8d7a9e;
+            text-align: right;
+        }
+        .emotion-legend {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            color: #8d7a9e;
+        }
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .stat-icon { font-size: 28px; margin-bottom: 8px; }
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #5d4e6d;
+            margin-bottom: 5px;
+        }
+        .stat-label { font-size: 12px; color: #8d7a9e; }
+        .settings-list { background: white; border-radius: 16px; overflow: hidden; }
+        .setting-item {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            padding: 18px 20px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .setting-item:last-child { border-bottom: none; }
+        .setting-item:hover { background: #f8f9fa; }
+        .setting-item.danger { color: #e74c3c; }
+        .setting-icon { font-size: 18px; margin-right: 15px; }
+        .setting-text { flex: 1; text-align: left; font-size: 15px; color: #5d4e6d; }
+        .setting-arrow { font-size: 20px; color: #ccc; }
+        .version-info {
+            text-align: center;
+            padding: 20px;
+            color: #8d7a9e;
+            font-size: 13px;
+        }
+
         .home-page { text-align: center; padding-top: 60px; }
         .home-title { font-size: 32px; font-weight: bold; color: #5d4e6d; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); }
         .home-subtitle { font-size: 16px; color: #8d7a9e; margin-bottom: 40px; }
@@ -97,17 +696,25 @@ body {
 }
         .emotion-icon { font-size: 40px; margin-bottom: 10px; }
         .emotion-name { font-size: 18px; font-weight: bold; color: #5d4e6d; }
-        .cards-page { padding-top: 20px; }
-        .cards-container { display: flex; flex-direction: column; gap: 20px; }
+        .cards-page { padding-top: 8px; }
+        .cards-container { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center;
+            gap: 20px; 
+            padding: 0 12px;
+        }
         .card-wrapper { 
-            perspective: 1000px; 
+            perspective: 1500px; 
             opacity: 0;
             transform: translateY(30px);
-            animation: cardSlideIn 0.5s ease-out forwards;
+            animation: cardSlideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            width: 100%;
+            max-width: 350px;
         }
-        .card-wrapper:nth-child(1) { animation-delay: 0.1s; }
-        .card-wrapper:nth-child(2) { animation-delay: 0.2s; }
-        .card-wrapper:nth-child(3) { animation-delay: 0.3s; }
+        .card-wrapper:nth-child(1) { animation-delay: 0.05s; }
+        .card-wrapper:nth-child(2) { animation-delay: 0.15s; }
+        .card-wrapper:nth-child(3) { animation-delay: 0.25s; }
         
         @keyframes cardSlideIn {
             from { opacity: 0; transform: translateY(30px); }
@@ -115,12 +722,18 @@ body {
         }
         
         .card {
-            width: 100%; height: 200px; position: relative;
-            transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            width: 100%; 
+            height: 260px; 
+            position: relative;
+            transform-style: preserve-3d; 
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); 
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.07);
+            border-radius: 20px;
+            transform: rotateY(180deg);
         }
         .card.flipped { 
-            transform: rotateY(180deg); 
+            transform: rotateY(0deg); 
         }
 
         .card-front,
@@ -129,22 +742,27 @@ body {
             width: 100%;
             height: 100%;
             backface-visibility: hidden;
-            border-radius: 15px;
+            -webkit-backface-visibility: hidden;
+            border-radius: 20px;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+            padding: 22px;
+            box-sizing: border-box;
         }
 
         .card-back {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(145deg, #667eea 0%, #764ba2 100%);
             color: white;
+            transform: rotateY(180deg);
+            justify-content: center;
+            align-items: center;
+            text-align: center;
         }
 
         .card-front {
             background: white;
-            transform: rotateY(180deg);
+            justify-content: space-between;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
         }
         .card-sparkles {
             position: absolute;
@@ -154,6 +772,7 @@ body {
             height: 100%;
             pointer-events: none;
             z-index: 10;
+            border-radius: 20px;
         }
         .sparkle {
             position: absolute;
@@ -161,7 +780,7 @@ body {
             height: 6px;
             background: white;
             border-radius: 50%;
-            animation: sparkle 0.8s ease-out forwards;
+            animation: sparkle 0.7s ease-out forwards;
             opacity: 0;
         }
         @keyframes sparkle {
@@ -170,26 +789,188 @@ body {
                 opacity: 1; 
             }
             100% { 
-                transform: scale(1) translateY(-50px); 
+                transform: scale(1) translateY(-40px); 
                 opacity: 0; 
             }
         }
-        .card-back-icon { font-size: 50px; margin-bottom: 10px; }
-        .card-back-text { font-size: 16px; opacity: 0.9; }
-        .card-front { background: white; transform: rotateY(180deg); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
-        .emotion-tag { font-size: 12px; padding: 4px 12px; border-radius: 20px; margin-bottom: 10px; color: white; font-weight: bold; }
-        .story-text { font-size: 15px; color: #5d4e6d; text-align: center; line-height: 1.6; margin-bottom: 15px; flex: 1; display: flex; align-items: center; }
-        .challenge-box { background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 12px; padding: 12px; width: 100%; }
-        .challenge-label { font-size: 12px; color: #8d7a9e; margin-bottom: 5px; }
-        .challenge-text { font-size: 14px; color: #5d4e6d; font-weight: 500; }
+
+        /* 通用粒子样式 */
+        .particle {
+            position: absolute;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        /* 星星粒子动画 */
+        .star-particle {
+            animation: starFloat 1.5s ease-out forwards;
+            opacity: 0;
+        }
+        @keyframes starFloat {
+            0% {
+                transform: scale(0) translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            20% {
+                transform: scale(1.2) translateY(-10px) rotate(180deg);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(0.3) translateY(-60px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* 光点粒子动画 */
+        .light-particle {
+            border-radius: 50%;
+            animation: lightBurst 1s ease-out forwards;
+            opacity: 0;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+        @keyframes lightBurst {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.5);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(0) translateY(-30px);
+                opacity: 0;
+            }
+        }
+
+        /* 漂浮粒子动画 */
+        .float-particle {
+            animation: floatUp 2.5s ease-in-out forwards;
+            opacity: 0;
+        }
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(0);
+                opacity: 0;
+            }
+            30% {
+                transform: translateY(-20px) rotate(180deg) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-80px) rotate(360deg) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        /* 闪烁粒子动画 */
+        .twinkle-particle {
+            border-radius: 50%;
+            animation: twinkle 0.6s ease-in-out infinite;
+            opacity: 0;
+            animation-iteration-count: 3;
+        }
+        @keyframes twinkle {
+            0%, 100% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.5);
+                opacity: 1;
+            }
+        }
+        .card-back-icon { font-size: 55px; margin-bottom: 12px; animation: pulse 2s ease-in-out infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+        .card-back-text { font-size: 15px; opacity: 0.95; line-height: 1.6; padding: 0 8px; }
+        .emotion-tag { 
+            font-size: 11px; 
+            padding: 5px 14px; 
+            border-radius: 20px; 
+            margin-bottom: 10px; 
+            color: white; 
+            font-weight: 600; 
+            align-self: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+        }
+        .story-text { 
+            font-size: 14px; 
+            color: #5d4e6d; 
+            text-align: center; 
+            line-height: 1.6; 
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            word-break: break-word;
+            padding: 0 3px;
+        }
+        .challenge-box { 
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); 
+            border-radius: 12px; 
+            padding: 12px; 
+            width: 100%; 
+            margin-top: 8px;
+        }
+        .challenge-label { 
+            font-size: 11px; 
+            color: #8d7a9e; 
+            margin-bottom: 5px; 
+            display: block;
+            text-align: center;
+        }
+        .challenge-text { 
+            font-size: 13px; 
+            color: #5d4e6d; 
+            font-weight: 500; 
+            text-align: center;
+            display: block;
+            line-height: 1.4;
+        }
+        .card-footer {
+            display: flex;
+            justify-content: center;
+            padding-top: 8px;
+        }
         .complete-btn {
             background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
-            border: none; padding: 10px 25px; border-radius: 30px;
-            font-size: 14px; font-weight: bold; color: #5d4e6d;
-            margin-top: 15px; cursor: pointer; transition: all 0.3s ease;
+            border: none; 
+            padding: 9px 28px; 
+            border-radius: 25px;
+            font-size: 12px; 
+            font-weight: 500; 
+            color: #5d4e6d;
+            cursor: pointer; 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 3px 10px rgba(132, 250, 176, 0.35);
         }
-        .complete-btn:hover { transform: scale(1.05); }
-        .complete-btn.completed { background: linear-gradient(135deg, #c8e6c9 0%, #b2dfdb 100%); color: #66bb6a; }
+        .complete-btn:hover { 
+            transform: scale(1.03); 
+            box-shadow: 0 4px 14px rgba(132, 250, 176, 0.45);
+        }
+        .complete-btn.completed { 
+            background: linear-gradient(135deg, #c8e6c9 0%, #b2dfdb 100%); 
+            color: #4caf50; 
+            box-shadow: 0 3px 10px rgba(196, 230, 201, 0.35);
+        }
+        .small-action {
+            font-size: 11px;
+            color: #667eea;
+            text-align: center;
+            margin-top: 8px;
+            display: block;
+        }
+        .social-count {
+            font-size: 10px;
+            color: #8d7a9e;
+            text-align: center;
+            margin-top: 5px;
+            display: block;
+        }
+        .social-count .count-number {
+            font-weight: 500;
+            color: #5d4e6d;
+        }
         .btn-group { display: flex; gap: 15px; margin-top: 30px; }
         .btn { flex: 1; padding: 15px; border: none; border-radius: 15px; font-size: 16px; font-weight: bold; cursor: pointer; transition: all 0.3s ease; }
         .btn-primary { background: linear-gradient(135deg, #ffb7b2 0%, #ffecd2 100%); color: #5d4e6d; }
@@ -200,18 +981,22 @@ body {
             bottom: calc(60px + env(safe-area-inset-bottom)); 
             left: 0; 
             width: 100%; 
-            height: 80px; 
+            height: 120px; 
             overflow: hidden; 
             pointer-events: none; 
             z-index: 100; 
         }
         .message-item {
-            position: absolute; white-space: nowrap; font-size: 14px;
-            color: rgba(93, 78, 109, 0.7); animation: floatMessage 15s linear infinite;
+            position: absolute; 
+            white-space: nowrap; 
+            font-size: 13px;
+            color: rgba(93, 78, 109, 0.65); 
+            animation: floatMessage 18s linear infinite;
+            line-height: 1.4;
         }
         @keyframes floatMessage {
             from { transform: translateX(100vw); }
-            to { transform: translateX(-100%); }
+            to { transform: translateX(-120%); }
         }
         .poster-page { padding-top: 20px; }
         .input-group { margin-bottom: 20px; }
@@ -258,13 +1043,13 @@ body {
             0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
             100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
         }
-        .back-btn {
+        .poster-back-btn {
             position: absolute; top: 20px; left: 20px; width: 45px; height: 45px;
             background: white; border: none; border-radius: 50%; font-size: 20px;
             cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             transition: all 0.3s ease; z-index: 10;
         }
-        .back-btn:hover { transform: scale(1.1); }
+        .poster-back-btn:hover { transform: scale(1.1); }
         nav {
             position: fixed; 
             bottom: 0; 
@@ -431,6 +1216,11 @@ body {
             <button onclick="goToStatsPage()" id="nav-stats">
                 <span class="nav-icon">📊</span>
                 <span class="nav-text">旅程</span>
+                <span class="nav-dot"></span>
+            </button>
+            <button onclick="goToProfilePage()" id="nav-profile">
+                <span class="nav-icon">👤</span>
+                <span class="nav-text">我的</span>
                 <span class="nav-dot"></span>
             </button>
         </div>
@@ -693,23 +1483,30 @@ body {
             localStorage.setItem(key, JSON.stringify(value));
         }
 
+        function getUserPrefix() {
+            const user = getUserInfo();
+            return user?.userId ? user.userId + '_' : '';
+        }
+
         function getStats() {
+            const prefix = getUserPrefix();
             return {
-                drawCount: getStoredData('drawCount', 0),
-                completeCount: getStoredData('completeCount', 0),
-                posterCount: getStoredData('posterCount', 0),
+                drawCount: getStoredData(prefix + 'drawCount', 0),
+                completeCount: getStoredData(prefix + 'completeCount', 0),
+                posterCount: getStoredData(prefix + 'posterCount', 0),
                 participants: getStoredData('participants', Math.floor(1000 + Math.random() * 5000))
             };
         }
 
         function updateStats(type) {
+            const prefix = getUserPrefix();
             const stats = getStats();
             if (type === 'draw') stats.drawCount++;
             else if (type === 'complete') stats.completeCount++;
             else if (type === 'poster') stats.posterCount++;
-            storeData('drawCount', stats.drawCount);
-            storeData('completeCount', stats.completeCount);
-            storeData('posterCount', stats.posterCount);
+            storeData(prefix + 'drawCount', stats.drawCount);
+            storeData(prefix + 'completeCount', stats.completeCount);
+            storeData(prefix + 'posterCount', stats.posterCount);
             return stats;
         }
 
@@ -780,6 +1577,364 @@ body {
             }
             
             requestAnimationFrame(update);
+        }
+
+        // 渲染登录页面
+        function renderLoginPage() {
+            document.querySelector('nav').style.display = 'none';
+            container.innerHTML = `
+                <div class="login-page">
+                    <div class="login-header">
+                        <div class="login-logo">🌌</div>
+                        <h1 class="login-title">平行世界情绪驿站</h1>
+                        <p class="login-subtitle">探索你的平行身份</p>
+                    </div>
+                    
+                    <div class="login-card">
+                        <div class="login-step active" id="step-1">
+                            <h3 class="step-title">第一步：选择登录方式</h3>
+                            <div class="login-methods">
+                                <button class="login-btn phone-btn" onclick="showPhoneLogin()">
+                                    <span class="login-icon">📱</span>
+                                    <span class="login-text">手机号登录</span>
+                                </button>
+                                <button class="login-btn wechat-btn" onclick="showWechatLogin()">
+                                    <span class="login-icon">💬</span>
+                                    <span class="login-text">微信登录</span>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="login-step" id="step-2">
+                            <div class="step-header">
+                                <button class="back-btn" onclick="goBackToStep1()">← 返回</button>
+                                <h3 class="step-title">第二步：验证信息</h3>
+                            </div>
+                            <div class="form-group">
+                                <input type="tel" id="phone-input" placeholder="请输入手机号" maxlength="11" class="form-input">
+                            </div>
+                            <div class="form-group code-group">
+                                <input type="text" id="code-input" placeholder="请输入验证码" maxlength="6" class="form-input">
+                                <button class="send-code-btn" id="send-code-btn" onclick="sendCode()">发送验证码</button>
+                            </div>
+                            <button class="confirm-btn" onclick="verifyPhone()">确认验证</button>
+                        </div>
+                        
+                        <div class="login-step" id="step-wechat">
+                            <div class="step-header">
+                                <button class="back-btn" onclick="goBackToStep1()">← 返回</button>
+                                <h3 class="step-title">微信登录</h3>
+                            </div>
+                            <div class="wechat-qrcode-container" id="wechat-qrcode-container">
+                                <div class="qrcode-wrapper" onclick="simulateWechatScan()">
+                                    <div class="qrcode">
+                                        <div class="qrcode-pattern"></div>
+                                        <div class="qrcode-center">
+                                            <span class="wechat-icon">💬</span>
+                                        </div>
+                                    </div>
+                                    <p class="qrcode-hint">👆 点击二维码模拟扫码</p>
+                                </div>
+                                <p class="wechat-tip">请使用微信扫码登录</p>
+                                <div class="wechat-steps">
+                                    <div class="step-item">
+                                        <span class="step-num">1</span>
+                                        <span>打开微信</span>
+                                    </div>
+                                    <div class="step-item">
+                                        <span class="step-num">2</span>
+                                        <span>扫一扫</span>
+                                    </div>
+                                    <div class="step-item">
+                                        <span class="step-num">3</span>
+                                        <span>确认登录</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="login-step" id="step-3">
+                            <div class="step-header">
+                                <button class="back-btn" onclick="goBackToStep1()">← 返回</button>
+                                <h3 class="step-title">第三步：完善资料</h3>
+                            </div>
+                            <p class="step-desc">为了给你提供更贴心的服务，请填写以下信息</p>
+                            
+                            <div class="form-group">
+                                <label class="form-label">年龄</label>
+                                <input type="number" id="age-input" placeholder="请输入年龄" min="18" max="26" class="form-input">
+                                <p class="form-hint">仅限18-26岁的大学生/研究生</p>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">性别</label>
+                                <div class="gender-options">
+                                    <label class="gender-option">
+                                        <input type="radio" name="gender" value="male" checked>
+                                        <span>👨 男</span>
+                                    </label>
+                                    <label class="gender-option">
+                                        <input type="radio" name="gender" value="female">
+                                        <span>👩 女</span>
+                                    </label>
+                                    <label class="gender-option">
+                                        <input type="radio" name="gender" value="other">
+                                        <span>⚧ 其他</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">昵称</label>
+                                <input type="text" id="nickname-input" placeholder="请输入昵称" maxlength="20" class="form-input">
+                            </div>
+                            
+                            <button class="confirm-btn" onclick="completeRegistration()">完成注册</button>
+                        </div>
+                    </div>
+                    
+                    <div class="privacy-info">
+                        <p>🌿 你的信息仅用于个性化推荐，不会被泄露或分享</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 显示手机号登录
+        function showPhoneLogin() {
+            document.getElementById('step-1').classList.remove('active');
+            document.getElementById('step-2').classList.add('active');
+        }
+
+        // 显示微信登录二维码
+        function showWechatLogin() {
+            document.getElementById('step-1').classList.remove('active');
+            document.getElementById('step-wechat').classList.add('active');
+        }
+
+        // 模拟微信扫码登录
+        function simulateWechatScan() {
+            const container = document.getElementById('wechat-qrcode-container');
+            // 显示扫描中状态
+            container.innerHTML = `
+                <div class="scan-animation">
+                    <div class="scan-icon">💬</div>
+                    <p class="scan-text">正在扫描...</p>
+                    <div class="scan-progress">
+                        <div class="progress-bar"></div>
+                    </div>
+                </div>
+            `;
+            
+            // 模拟扫码延迟
+            setTimeout(() => {
+                // 显示登录成功状态
+                container.innerHTML = `
+                    <div class="scan-success">
+                        <div class="success-icon">✓</div>
+                        <p class="success-text">扫码成功！</p>
+                        <p class="success-subtext">正在跳转...</p>
+                    </div>
+                `;
+                
+                // 跳转到完善资料页面
+                setTimeout(() => {
+                    document.getElementById('step-wechat').classList.remove('active');
+                    document.getElementById('step-3').classList.add('active');
+                }, 1500);
+            }, 2000);
+        }
+
+        // 返回第一步
+        function goBackToStep1() {
+            document.getElementById('step-1').classList.add('active');
+            document.getElementById('step-2').classList.remove('active');
+            document.getElementById('step-wechat').classList.remove('active');
+            document.getElementById('step-3').classList.remove('active');
+            // 关闭短信通知
+            closeSmsNotification();
+            // 重置验证码按钮状态
+            const sendBtn = document.getElementById('send-code-btn');
+            if (sendBtn) {
+                sendBtn.disabled = false;
+                sendBtn.innerHTML = '发送验证码';
+            }
+            // 清空输入
+            document.getElementById('phone-input').value = '';
+            document.getElementById('code-input').value = '';
+            // 重置微信二维码容器
+            const wechatContainer = document.getElementById('wechat-qrcode-container');
+            if (wechatContainer) {
+                wechatContainer.innerHTML = `
+                    <div class="qrcode-wrapper" onclick="simulateWechatScan()">
+                        <div class="qrcode">
+                            <div class="qrcode-pattern"></div>
+                            <div class="qrcode-center">
+                                <span class="wechat-icon">💬</span>
+                            </div>
+                        </div>
+                        <p class="qrcode-hint">👆 点击二维码模拟扫码</p>
+                    </div>
+                    <p class="wechat-tip">请使用微信扫码登录</p>
+                    <div class="wechat-steps">
+                        <div class="step-item">
+                            <span class="step-num">1</span>
+                            <span>打开微信</span>
+                        </div>
+                        <div class="step-item">
+                            <span class="step-num">2</span>
+                            <span>扫一扫</span>
+                        </div>
+                        <div class="step-item">
+                            <span class="step-num">3</span>
+                            <span>确认登录</span>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // 存储验证码（用于验证）
+        let currentVerificationCode = '';
+
+        // 发送验证码
+        function sendCode() {
+            const phone = document.getElementById('phone-input').value;
+            const sendBtn = document.getElementById('send-code-btn');
+            
+            if (!phone || phone.length !== 11) {
+                alert('请输入正确的手机号');
+                return;
+            }
+            
+            // 生成6位随机验证码
+            currentVerificationCode = generateCode();
+            
+            // 模拟发送短信（显示发送成功提示，不显示验证码）
+            showSmsNotification(phone);
+            
+            // 添加倒计时
+            let count = 60;
+            sendBtn.disabled = true;
+            sendBtn.innerHTML = `${count}秒后重发`;
+            
+            const timer = setInterval(() => {
+                count--;
+                if (count <= 0) {
+                    clearInterval(timer);
+                    sendBtn.disabled = false;
+                    sendBtn.innerHTML = '发送验证码';
+                } else {
+                    sendBtn.innerHTML = `${count}秒后重发`;
+                }
+            }, 1000);
+        }
+
+        // 生成6位数字验证码
+        function generateCode() {
+            let code = '';
+            for (let i = 0; i < 6; i++) {
+                code += Math.floor(Math.random() * 10);
+            }
+            return code;
+        }
+
+        // 存储通知元素引用
+        let currentSmsNotification = null;
+
+        // 显示短信发送通知
+        function showSmsNotification(phone) {
+            // 如果已有通知，先移除
+            if (currentSmsNotification && currentSmsNotification.parentNode) {
+                currentSmsNotification.remove();
+            }
+            
+            // 创建通知弹窗
+            const notification = document.createElement('div');
+            notification.className = 'sms-notification';
+            notification.innerHTML = `
+                <div class="sms-icon">📱</div>
+                <div class="sms-content">
+                    <p class="sms-title">短信已发送</p>
+                    <p class="sms-desc">验证码已发送到 ${maskPhone(phone)}</p>
+                    <p class="sms-test">【测试】验证码：<span class="code-highlight">${currentVerificationCode}</span></p>
+                </div>
+                <button class="sms-close" onclick="closeSmsNotification()">×</button>
+            `;
+            document.body.appendChild(notification);
+            currentSmsNotification = notification;
+        }
+
+        // 关闭短信通知
+        function closeSmsNotification() {
+            if (currentSmsNotification && currentSmsNotification.parentNode) {
+                currentSmsNotification.remove();
+                currentSmsNotification = null;
+            }
+        }
+
+        // 手机号脱敏显示
+        function maskPhone(phone) {
+            if (!phone || phone.length !== 11) return phone;
+            return phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
+        }
+
+        // 验证手机号
+        function verifyPhone() {
+            const phone = document.getElementById('phone-input').value;
+            const code = document.getElementById('code-input').value;
+            
+            if (!phone || phone.length !== 11) {
+                alert('请输入正确的手机号');
+                return;
+            }
+            
+            if (!code || code.length !== 6) {
+                alert('请输入正确的验证码');
+                return;
+            }
+            
+            // 验证验证码是否正确
+            if (code !== currentVerificationCode) {
+                alert('验证码错误，请重新输入');
+                return;
+            }
+            
+            // 验证通过，关闭通知并跳转到下一步
+            closeSmsNotification();
+            document.getElementById('step-2').classList.remove('active');
+            document.getElementById('step-3').classList.add('active');
+        }
+
+        // 完成注册
+        function completeRegistration() {
+            const age = parseInt(document.getElementById('age-input').value);
+            const gender = document.querySelector('input[name="gender"]:checked').value;
+            const nickname = document.getElementById('nickname-input').value || '平行旅行者';
+            
+            // 年龄验证
+            if (isNaN(age) || age < 18 || age > 26) {
+                alert('请输入18-26岁之间的年龄');
+                return;
+            }
+            
+            // 保存用户信息
+            const userData = {
+                age,
+                gender,
+                nickname,
+                loginTime: new Date().toISOString(),
+                userId: 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9)
+            };
+            saveUserInfo(userData);
+            
+            // 显示欢迎信息
+            const content = getRecommendedContent(age, gender);
+            alert(`${content.greeting}欢迎来到平行世界情绪驿站！`);
+            
+            // 跳转到首页
+            document.querySelector('nav').style.display = '';
+            goToHome();
         }
 
         function renderHome() {
@@ -893,6 +2048,39 @@ body {
             return list[Math.floor(Math.random() * list.length)];
         }
 
+        // 获取卡片背面文字
+        function getBackText(emotion, index) {
+            const backTexts = {
+                '开心': [
+                    '在平行世界，你是一名阳光收藏家，专门收集人们微笑时的阳光能量。',
+                    '你拥有让时间慢下来的魔法，每个美好瞬间都被你珍藏在水晶瓶里。',
+                    '你的口袋里装满了小星星，每一颗都代表一个被治愈的心灵。'
+                ],
+                '焦虑': [
+                    '在平行世界，你是迷雾导航员，帮助迷路的灵魂找到前行的方向。',
+                    '你拥有一盏永不熄灭的灯塔，为迷茫的船只指引归途。',
+                    '你的双手能编织安心的结界，让躁动的心灵重归平静。'
+                ],
+                '疲惫': [
+                    '在平行世界，你是梦境建筑师，为疲惫的旅人建造温暖的避风港。',
+                    '你掌管着一片宁静的森林，每棵树都能让人卸下疲惫。',
+                    '你的歌声能让时间静止，给疲惫的心灵片刻喘息。'
+                ],
+                '迷茫': [
+                    '在平行世界，你是命运拼图师，帮助人们找到属于自己的那片拼图。',
+                    '你拥有一面能照见内心的镜子，让迷茫的人看清真实的自己。',
+                    '你的图书馆收藏着每个人的人生故事，指引迷途者找到答案。'
+                ],
+                '兴奋': [
+                    '在平行世界，你是火花传递者，用热情点燃每一个平凡的日子。',
+                    '你的笑容能点亮夜空，让星星都为之闪耀。',
+                    '你掌管着欢乐的庆典，让每个值得庆祝的时刻都充满惊喜。'
+                ]
+            };
+            const list = backTexts[emotion] || backTexts['开心'];
+            return list[index % list.length];
+        }
+
         // 获取卡片抽取人数统计
         function getCardDrawCount(cardText) {
             const cardCounts = getStoredData('cardCounts', {});
@@ -911,6 +2099,9 @@ body {
             currentCards = getRandomStories(selectedEmotion, 3);
             updateStats('draw');
             
+            // 更新情绪统计
+            updateEmotionStats(selectedEmotion);
+            
             // 更新每张卡片的抽取次数
             currentCards.forEach(card => {
                 updateCardDrawCount(card.text);
@@ -920,18 +2111,15 @@ body {
                 ${createPageHeader('🧩 心情卡片', true)}
                 <div class="cards-page">
                     <h2 class="page-title">${selectedEmotion}的平行世界</h2>
-                    <p style="text-align: center; color: #8d7a9e; margin-bottom: 20px;">点击卡片查看故事</p>
+                    <p style="text-align: center; color: #8d7a9e; margin-bottom: 25px;">点击卡片查看故事</p>
                     <div class="cards-container">
                         ${currentCards.map((card, index) => {
                             const drawCount = getCardDrawCount(card.text);
+                            const backText = getBackText(card.emotion, index);
                             return `
                             <div class="card-wrapper">
                                 <div class="card-sparkles" id="sparkles-${index}"></div>
                                 <div class="card" id="card-${index}" onclick="flipCard(${index})">
-                                    <div class="card-back">
-                                        <div class="card-back-icon">📖</div>
-                                        <div class="card-back-text">点击翻开卡片</div>
-                                    </div>
                                     <div class="card-front">
                                         <span class="emotion-tag" style="background: ${getEmotionColor(card.emotion)}">${card.emotion}</span>
                                         <p class="story-text">${card.text}</p>
@@ -939,15 +2127,16 @@ body {
                                             <div class="challenge-label">🌱 温柔挑战</div>
                                             <div class="challenge-text">${card.challenge}</div>
                                         </div>
-                                        <div style="margin-top: 8px; font-size: 11px; color: #667eea; text-align: center;">
-                                            💡 小行动：${getSmallAction(card.emotion)}
+                                        <span class="small-action">💡 小行动：${getSmallAction(card.emotion)}</span>
+                                        <span class="social-count">💫 此刻有 <span class="count-number">${drawCount}</span> 个灵魂也在读这个故事</span>
+                                        <div class="card-footer">
+                                            <button class="complete-btn" id="complete-btn-${index}" 
+                                                onclick="event.stopPropagation(); completeChallenge(${index})">完成挑战</button>
                                         </div>
-                                        <!-- 伪社交统计 -->
-                                        <div style="margin-top: 8px; font-size: 12px; color: #8d7a9e; text-align: center;">
-                                            💫 此刻有 <span style="font-weight: bold; color: #5d4e6d;">${drawCount}</span> 个灵魂也在读这个故事
-                                        </div>
-                                        <button class="complete-btn" id="complete-btn-${index}" 
-                                            onclick="event.stopPropagation(); completeChallenge(${index})">完成挑战</button>
+                                    </div>
+                                    <div class="card-back">
+                                        <div class="card-back-icon">🌟</div>
+                                        <div class="card-back-text">${backText}</div>
                                     </div>
                                 </div>
                             </div>
@@ -955,8 +2144,8 @@ body {
                         }).join('')}
                     </div>
                     <!-- 用户输入寄语区域 -->
-                    <div class="message-input-area" style="margin-top: 30px; background: white; border-radius: 15px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
-                        <p style="font-size: 14px; color: #5d4e6d; margin-bottom: 10px;">💌 留下你的温暖寄语</p>
+                    <div class="message-input-area" style="margin-top: 35px; background: white; border-radius: 18px; padding: 22px; box-shadow: 0 6px 20px rgba(0,0,0,0.06);">
+                        <p style="font-size: 14px; color: #5d4e6d; margin-bottom: 12px;">💌 留下你的温暖寄语</p>
                         <!-- 渐变情绪条 -->
                         <div class="mood-bar-container">
                             <div class="mood-bar" id="mood-bar"></div>
@@ -968,9 +2157,9 @@ body {
                             </div>
                         </div>
                         <input type="text" id="user-message-input" placeholder="输入你想说的话..." 
-                            style="width: 100%; padding: 12px; border: 2px solid #e9ecef; border-radius: 10px; font-size: 14px; outline: none; margin-bottom: 10px; margin-top: 10px;"
+                            style="width: 100%; padding: 13px; border: 2px solid #e9ecef; border-radius: 12px; font-size: 14px; outline: none; margin-bottom: 12px; margin-top: 12px; box-sizing: border-box;"
                             maxlength="50" oninput="updateMoodBar(this.value)">
-                        <button class="btn btn-primary" style="width: 100%; padding: 12px;" onclick="submitMessage()">
+                        <button class="btn btn-primary" style="width: 100%; padding: 13px;" onclick="submitMessage()">
                             让寄语漂浮起来 ✨
                         </button>
                     </div>
@@ -996,28 +2185,92 @@ body {
             }
         }
 
-        // 创建闪光微粒效果
+        // 创建粒子效果
         function createSparkles(container) {
             if (!container) return;
             
-            // 清除之前的闪光
+            // 清除之前的粒子
             container.innerHTML = '';
             
-            // 创建多个闪光粒子
-            for (let i = 0; i < 12; i++) {
-                const sparkle = document.createElement('div');
-                sparkle.className = 'sparkle';
-                sparkle.style.left = (Math.random() * 100) + '%';
-                sparkle.style.top = (Math.random() * 100) + '%';
-                sparkle.style.animationDelay = (Math.random() * 0.3) + 's';
-                sparkle.style.animationDuration = (0.5 + Math.random() * 0.3) + 's';
-                container.appendChild(sparkle);
-            }
+            // 创建星星粒子
+            createStarParticles(container);
             
-            // 3秒后清除闪光
+            // 创建光点粒子
+            createLightParticles(container);
+            
+            // 创建漂浮粒子
+            createFloatParticles(container);
+            
+            // 创建闪烁粒子
+            createTwinkleParticles(container);
+            
+            // 4秒后清除粒子
             setTimeout(() => {
                 container.innerHTML = '';
-            }, 3000);
+            }, 4000);
+        }
+
+        // 创建星星粒子
+        function createStarParticles(container) {
+            const starEmojis = ['✨', '🌟', '⭐', '💫', '⚡', '🌟', '✨'];
+            for (let i = 0; i < 8; i++) {
+                const star = document.createElement('div');
+                star.className = 'particle star-particle';
+                star.textContent = starEmojis[Math.floor(Math.random() * starEmojis.length)];
+                star.style.left = (Math.random() * 100) + '%';
+                star.style.top = (Math.random() * 100) + '%';
+                star.style.fontSize = (12 + Math.random() * 16) + 'px';
+                star.style.animationDelay = (Math.random() * 0.4) + 's';
+                star.style.animationDuration = (1 + Math.random() * 0.8) + 's';
+                container.appendChild(star);
+            }
+        }
+
+        // 创建光点粒子
+        function createLightParticles(container) {
+            for (let i = 0; i < 15; i++) {
+                const light = document.createElement('div');
+                light.className = 'particle light-particle';
+                light.style.left = (Math.random() * 100) + '%';
+                light.style.top = (Math.random() * 100) + '%';
+                light.style.width = (4 + Math.random() * 6) + 'px';
+                light.style.height = light.style.width;
+                light.style.animationDelay = (Math.random() * 0.5) + 's';
+                light.style.animationDuration = (0.8 + Math.random() * 0.6) + 's';
+                light.style.background = `rgba(255, 255, 255, ${0.6 + Math.random() * 0.4})`;
+                container.appendChild(light);
+            }
+        }
+
+        // 创建漂浮粒子
+        function createFloatParticles(container) {
+            for (let i = 0; i < 6; i++) {
+                const float = document.createElement('div');
+                float.className = 'particle float-particle';
+                float.textContent = '💫';
+                float.style.left = (Math.random() * 100) + '%';
+                float.style.top = (Math.random() * 100) + '%';
+                float.style.fontSize = (14 + Math.random() * 10) + 'px';
+                float.style.animationDelay = (Math.random() * 0.3) + 's';
+                float.style.animationDuration = (2 + Math.random() * 1) + 's';
+                container.appendChild(float);
+            }
+        }
+
+        // 创建闪烁粒子
+        function createTwinkleParticles(container) {
+            for (let i = 0; i < 10; i++) {
+                const twinkle = document.createElement('div');
+                twinkle.className = 'particle twinkle-particle';
+                twinkle.style.left = (Math.random() * 100) + '%';
+                twinkle.style.top = (Math.random() * 100) + '%';
+                twinkle.style.width = (3 + Math.random() * 4) + 'px';
+                twinkle.style.height = twinkle.style.width;
+                twinkle.style.animationDelay = (Math.random() * 0.6) + 's';
+                twinkle.style.animationDuration = (0.4 + Math.random() * 0.3) + 's';
+                twinkle.style.background = `rgba(255, 223, 186, ${0.7 + Math.random() * 0.3})`;
+                container.appendChild(twinkle);
+            }
         }
 
         // 用户提交寄语
@@ -1522,14 +2775,17 @@ body {
 
         function initMessagesWall() {
             messagesWall.innerHTML = '';
-            for (let i = 0; i < 8; i++) {
+            // 预设垂直位置，避免重叠
+            const positions = [15, 35, 55, 75, 25, 45, 65, 85];
+            for (let i = 0; i < 6; i++) {
                 const message = sampleMessages[Math.floor(Math.random() * sampleMessages.length)];
                 const item = document.createElement('div');
                 item.className = 'message-item';
                 item.textContent = message;
-                item.style.top = (Math.random() * 60 + 10) + '%';
-                item.style.animationDelay = Math.random() * 15 + 's';
-                item.style.animationDuration = (12 + Math.random() * 8) + 's';
+                // 使用预设位置，确保弹幕垂直分布均匀
+                item.style.top = positions[i] + '%';
+                item.style.animationDelay = Math.random() * 18 + 's';
+                item.style.animationDuration = (15 + Math.random() * 10) + 's';
                 messagesWall.appendChild(item);
             }
         }
@@ -1537,6 +2793,273 @@ body {
         /**
          * 更新底部导航高亮状态
          */
+        // 渲染个人中心页面
+        function renderProfilePage() {
+            const user = getUserInfo();
+            const stats = getStats();
+            const emotionStats = getEmotionStats();
+            
+            container.innerHTML = `
+                <div class="profile-page">
+                    ${createPageHeader('👤 我的账号')}
+                    
+                    <!-- 用户信息卡片 -->
+                    <div class="profile-card">
+                        <div class="profile-avatar">
+                            <span class="avatar-emoji">${getAvatarEmoji(user?.gender, user?.age)}</span>
+                        </div>
+                        <div class="profile-info">
+                            <h2 class="profile-name">${user?.nickname || '平行旅行者'}</h2>
+                            <p class="profile-greeting">${getRecommendedContent(user?.age, user?.gender)?.greeting || '欢迎回来'}</p>
+                            <div class="profile-tags">
+                                <span class="tag">${getAgeGroupLabel(user?.age)}</span>
+                                <span class="tag">${getGenderLabel(user?.gender)}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 情绪分析图表 -->
+                    <div class="section">
+                        <h3 class="section-title">📈 情绪分析</h3>
+                        <div class="emotion-chart-card">
+                            <div class="chart-header">
+                                <span>最近7天情绪分布</span>
+                            </div>
+                            <div class="emotion-chart">
+                                ${renderEmotionChart(emotionStats)}
+                            </div>
+                            <div class="emotion-legend">
+                                <div class="legend-item"><span class="legend-color" style="background: #ffb7b2;"></span>开心</div>
+                                <div class="legend-item"><span class="legend-color" style="background: #ffecd2;"></span>焦虑</div>
+                                <div class="legend-item"><span class="legend-color" style="background: #e9ecef;"></span>疲惫</div>
+                                <div class="legend-item"><span class="legend-color" style="background: #dfe6e9;"></span>迷茫</div>
+                                <div class="legend-item"><span class="legend-color" style="background: #fd79a8;"></span>兴奋</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 数据统计 -->
+                    <div class="section">
+                        <h3 class="section-title">📊 我的数据</h3>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-icon">📖</div>
+                                <div class="stat-value">${stats.drawCount}</div>
+                                <div class="stat-label">抽卡次数</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">✅</div>
+                                <div class="stat-value">${stats.completeCount}</div>
+                                <div class="stat-label">完成挑战</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">🖼</div>
+                                <div class="stat-value">${stats.posterCount}</div>
+                                <div class="stat-label">生成海报</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">📅</div>
+                                <div class="stat-value">${getDaysLoggedIn()}</div>
+                                <div class="stat-label">连续登录</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 设置选项 -->
+                    <div class="section">
+                        <h3 class="section-title">⚙️ 设置</h3>
+                        <div class="settings-list">
+                            <button class="setting-item" onclick="editProfile()">
+                                <span class="setting-icon">✏️</span>
+                                <span class="setting-text">编辑资料</span>
+                                <span class="setting-arrow">›</span>
+                            </button>
+                            <button class="setting-item" onclick="clearCache()">
+                                <span class="setting-icon">🗑️</span>
+                                <span class="setting-text">清除缓存</span>
+                                <span class="setting-arrow">›</span>
+                            </button>
+                            <button class="setting-item" onclick="showPrivacyPolicy()">
+                                <span class="setting-icon">🔒</span>
+                                <span class="setting-text">隐私政策</span>
+                                <span class="setting-arrow">›</span>
+                            </button>
+                            <button class="setting-item" onclick="showAbout()">
+                                <span class="setting-icon">ℹ️</span>
+                                <span class="setting-text">关于我们</span>
+                                <span class="setting-arrow">›</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- 账号操作 -->
+                    <div class="section">
+                        <h3 class="section-title">🔐 账号管理</h3>
+                        <div class="settings-list">
+                            <button class="setting-item" onclick="switchAccount()">
+                                <span class="setting-icon">🔄</span>
+                                <span class="setting-text">切换账号</span>
+                                <span class="setting-arrow">›</span>
+                            </button>
+                            <button class="setting-item danger" onclick="confirmLogout()">
+                                <span class="setting-icon">🚪</span>
+                                <span class="setting-text">退出登录</span>
+                                <span class="setting-arrow">›</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- 版本信息 -->
+                    <div class="version-info">
+                        <p>平行世界情绪驿站 v1.0</p>
+                        <p style="font-size: 12px; color: #8d7a9e;">你的信息仅保存在本地，不会被上传</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 获取头像表情
+        function getAvatarEmoji(gender, age) {
+            const emojis = {
+                male: ['👨', '🧑', '👴', '🧔'],
+                female: ['👩', '👧', '👵', '👸'],
+                other: ['🧑', '👽', '🤖', '🌟']
+            };
+            const list = emojis[gender] || emojis.other;
+            return list[Math.floor(Math.random() * list.length)];
+        }
+
+        // 获取年龄组标签
+        function getAgeGroupLabel(age) {
+            if (!age) return '未知年龄';
+            if (age >= 18 && age <= 20) return '大学低年级';
+            if (age >= 21 && age <= 23) return '大学高年级';
+            if (age >= 24 && age <= 26) return '研究生/毕业生';
+            return '青年';
+        }
+
+        // 获取性别标签
+        function getGenderLabel(gender) {
+            const labels = { male: '男性', female: '女性', other: '其他' };
+            return labels[gender] || '保密';
+        }
+
+        // 获取情绪统计
+        function getEmotionStats() {
+            const prefix = getUserPrefix();
+            const defaultStats = { happy: 0, anxious: 0, tired: 0, confused: 0, excited: 0 };
+            return getStoredData(prefix + 'emotionStats', defaultStats);
+        }
+
+        // 更新情绪统计
+        function updateEmotionStats(emotion) {
+            const prefix = getUserPrefix();
+            const stats = getEmotionStats();
+            const emotionMap = {
+                '开心': 'happy',
+                '焦虑': 'anxious',
+                '疲惫': 'tired',
+                '迷茫': 'confused',
+                '兴奋': 'excited'
+            };
+            const key = emotionMap[emotion];
+            if (key) {
+                stats[key]++;
+                storeData(prefix + 'emotionStats', stats);
+            }
+            return stats;
+        }
+
+        // 渲染情绪图表
+        function renderEmotionChart(stats) {
+            const total = stats.happy + stats.anxious + stats.tired + stats.confused + stats.excited;
+            if (total === 0) return '<div style="text-align:center;color:#8d7a9e;padding:20px;">暂无数据</div>';
+            
+            const items = [
+                { key: 'happy', value: stats.happy, color: '#ffb7b2', label: '开心' },
+                { key: 'anxious', value: stats.anxious, color: '#ffecd2', label: '焦虑' },
+                { key: 'tired', value: stats.tired, color: '#e9ecef', label: '疲惫' },
+                { key: 'confused', value: stats.confused, color: '#dfe6e9', label: '迷茫' },
+                { key: 'excited', value: stats.excited, color: '#fd79a8', label: '兴奋' }
+            ];
+            
+            return items.map(item => {
+                const percentage = Math.round((item.value / total) * 100);
+                return `
+                    <div class="chart-bar-item">
+                        <span class="chart-label">${item.label}</span>
+                        <div class="chart-bar-container">
+                            <div class="chart-bar" style="width:${percentage}%;background:${item.color};" title="${item.value}次 (${percentage}%)"></div>
+                        </div>
+                        <span class="chart-percentage">${percentage}%</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 获取连续登录天数
+        function getDaysLoggedIn() {
+            const loginDays = getStoredData('loginDays', []);
+            const today = new Date().toDateString();
+            
+            // 如果今天还没记录，添加记录
+            if (!loginDays.includes(today)) {
+                loginDays.push(today);
+                storeData('loginDays', loginDays);
+            }
+            
+            return loginDays.length;
+        }
+
+        // 编辑资料
+        function editProfile() {
+            const user = getUserInfo();
+            const newNickname = prompt('请输入新昵称:', user?.nickname);
+            if (newNickname && newNickname.trim()) {
+                saveUserInfo({ ...user, nickname: newNickname.trim() });
+                alert('昵称已更新！');
+                goToProfilePage();
+            }
+        }
+
+        // 清除缓存
+        function clearCache() {
+            if (confirm('确定要清除所有缓存数据吗？这将清除抽卡记录和统计数据，但不会退出登录。')) {
+                const prefix = getUserPrefix();
+                localStorage.removeItem(prefix + 'drawCount');
+                localStorage.removeItem(prefix + 'completeCount');
+                localStorage.removeItem(prefix + 'posterCount');
+                localStorage.removeItem('cardCounts'); // 卡片计数是全局的，不是用户特定的
+                localStorage.removeItem(prefix + 'emotionStats');
+                alert('缓存已清除！');
+                goToProfilePage();
+            }
+        }
+
+        // 显示隐私政策
+        function showPrivacyPolicy() {
+            alert('🔒 隐私政策\n\n我们重视你的隐私安全。\n\n• 所有数据仅保存在你的设备本地\n• 不会上传到任何服务器\n• 不会与第三方分享\n• 你可以随时清除数据');
+        }
+
+        // 显示关于页面
+        function showAbout() {
+            alert('🌌 平行世界情绪驿站 v1.0\n\n一个帮助你探索内心世界的温柔应用。\n\n功能特点：\n• 每日心情卡片\n• 平行身份探索\n• 温柔挑战任务\n• 情绪数据分析\n\n愿你在这里找到属于自己的温柔时刻。');
+        }
+
+        // 切换账号
+        function switchAccount() {
+            if (confirm('确定要切换账号吗？当前账号信息将被保存。')) {
+                logout();
+            }
+        }
+
+        // 确认退出登录
+        function confirmLogout() {
+            if (confirm('确定要退出登录吗？下次登录需要重新输入信息。')) {
+                logout();
+            }
+        }
+
         function updateNavHighlight() {
             document.querySelectorAll('nav button').forEach(btn => {
                 btn.classList.remove('active');
@@ -1639,6 +3162,11 @@ body {
             updateNavHighlight(); 
             animatePageTransition(renderStatsPage); 
         }
+        function goToProfilePage() { 
+            currentPage = 'profile'; 
+            updateNavHighlight(); 
+            animatePageTransition(renderProfilePage); 
+        }
 
         /**
          * 页面切换动画
@@ -1654,6 +3182,66 @@ body {
             }, 250);
         }
 
+        // 用户信息
+        let userInfo = null;
+
+        // 获取用户信息
+        function getUserInfo() {
+            if (userInfo) return userInfo;
+            const stored = getStoredData('userInfo', null);
+            userInfo = stored;
+            return stored;
+        }
+
+        // 保存用户信息
+        function saveUserInfo(info) {
+            userInfo = info;
+            storeData('userInfo', info);
+        }
+
+        // 检查是否已登录
+        function isLoggedIn() {
+            return getUserInfo() !== null;
+        }
+
+        // 退出登录
+        function logout() {
+            userInfo = null;
+            localStorage.removeItem('userInfo');
+            renderLoginPage();
+        }
+
+        // 根据年龄和性别获取推荐内容
+        function getRecommendedContent(age, gender) {
+            const ageGroup = getAgeGroup(age);
+            const content = {
+                '18-20': {
+                    'male': { greeting: '嗨，少年！', color: '#667eea', stories: ['校园青春故事', '成长的烦恼', '梦想的起点'] },
+                    'female': { greeting: '嗨，少女！', color: '#ff768a', stories: ['校园青春故事', '少女心事', '追梦之旅'] },
+                    'other': { greeting: '嗨，朋友！', color: '#84fab0', stories: ['校园青春故事', '成长感悟', '梦想起航'] }
+                },
+                '21-23': {
+                    'male': { greeting: '青年才俊！', color: '#4facfe', stories: ['奋斗的青春', '职场初体验', '学业与梦想'] },
+                    'female': { greeting: '青春正好！', color: '#ff9a9e', stories: ['奋斗的青春', '职场初体验', '生活美学'] },
+                    'other': { greeting: '正值青春！', color: '#a8edea', stories: ['奋斗的青春', '成长之路', '人生探索'] }
+                },
+                '24-26': {
+                    'male': { greeting: '成熟稳重！', color: '#43e97b', stories: ['人生新阶段', '责任与担当', '未来规划'] },
+                    'female': { greeting: '优雅从容！', color: '#f9ca24', stories: ['人生新阶段', '独立成长', '自我提升'] },
+                    'other': { greeting: '风华正茂！', color: '#fa709a', stories: ['人生新阶段', '自我探索', '未来展望'] }
+                }
+            };
+            return content[ageGroup]?.[gender] || content['21-23']['other'];
+        }
+
+        // 获取年龄组
+        function getAgeGroup(age) {
+            if (age >= 18 && age <= 20) return '18-20';
+            if (age >= 21 && age <= 23) return '21-23';
+            if (age >= 24 && age <= 26) return '24-26';
+            return '21-23';
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             initParticles();
             // 初始化深夜模式
@@ -1662,8 +3250,10 @@ body {
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.has('nickname') && urlParams.has('job') && urlParams.has('id')) {
                 renderQRCodeResult();
-            } else {
+            } else if (isLoggedIn()) {
                 renderHome();
+            } else {
+                renderLoginPage();
             }
         });
     </script>
