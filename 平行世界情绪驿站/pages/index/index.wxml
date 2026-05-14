@@ -1,0 +1,102 @@
+<scroll-view scroll-y class="page-scroll" enhanced show-scrollbar="false">
+  <view class="container {{isNightMode ? 'night-mode' : ''}}" style="transition: all 0.5s ease;">
+    <view class="home-page">
+      <!-- 头部区域 -->
+      <view class="home-header">
+        <text class="home-title">🌌 平行世界情绪驿站</text>
+        <text class="home-subtitle">每一种情绪，都是平行世界的入口</text>
+      </view>
+      
+      <!-- 漂浮粒子 -->
+      <view class="particles" id="particles">
+        <view wx:for="{{particles}}" wx:key="index" class="particle"></view>
+      </view>
+      
+      <!-- 今日情绪指数 -->
+      <view class="mood-index-card">
+        <text class="index-title">📊 今日情绪指数</text>
+        <view class="mood-ring">
+          <view class="ring-progress" style="background: conic-gradient(#ffb7b2 0deg, #667eea {{moodIndex * 3.6}}deg, transparent {{moodIndex * 3.6}}deg)"></view>
+          <view class="ring-inner">
+            <text class="mood-value">{{moodIndex}}</text>
+            <text class="mood-label">分</text>
+          </view>
+        </view>
+        <text class="mood-desc">{{getMoodDescription(moodIndex)}}</text>
+      </view>
+      
+      <!-- 情绪签到 -->
+      <view class="checkin-card" bindtap="checkin">
+        <view class="checkin-icon">{{hasCheckedIn ? '✅' : '🌙'}}</view>
+        <view class="checkin-content">
+          <text class="checkin-title">{{hasCheckedIn ? '今日已签到' : '每日签到'}}</text>
+          <text class="checkin-desc">{{hasCheckedIn ? '明天再来吧' : '签到获得情绪能量'}}</text>
+        </view>
+        <view class="checkin-streak">
+          <text class="streak-text">{{checkinStreak}} 天连续</text>
+        </view>
+      </view>
+      
+      <!-- 统计数据 -->
+      <view class="stats-row">
+        <view class="stat-item">
+          <text class="stat-number">{{stats.totalCards}}</text>
+          <text class="stat-label">累计抽卡</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-number">{{stats.completedChallenges}}</text>
+          <text class="stat-label">完成挑战</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-number">{{stats.daysStreak}}</text>
+          <text class="stat-label">连续天数</text>
+        </view>
+      </view>
+      
+      <!-- 主要操作区 -->
+      <button class="start-btn" bindtap="goToCardsPage">
+        <text>🎴 开始抽卡</text>
+      </button>
+      
+      <!-- 功能入口 -->
+      <view class="quick-actions">
+        <view class="action-card" bindtap="goToIdentityPage">
+          <text class="action-icon">✨</text>
+          <text class="action-text">平行身份卡</text>
+        </view>
+        <view class="action-card" bindtap="goToJourneyPage">
+          <text class="action-icon">📖</text>
+          <text class="action-text">我的旅程</text>
+        </view>
+        <view class="action-card ai-card" bindtap="openAIChat">
+          <text class="action-icon">🤖</text>
+          <text class="action-text">温柔机器人</text>
+        </view>
+      </view>
+      
+      <!-- 每日治愈语 -->
+      <view class="daily-message">
+        <text class="message-icon">💬</text>
+        <text class="message-content">{{dailyMessage}}</text>
+      </view>
+      
+      <!-- 漂浮瓶子 -->
+      <view class="floating-bottle">
+        <text class="bottle-icon">🍶</text>
+        <text class="bottle-text">{{bottleMessage}}</text>
+      </view>
+      
+      <!-- 夜间模式切换 -->
+      <view class="night-mode-toggle" bindtap="toggleNightMode">
+        <text class="toggle-icon">{{isNightMode ? '☀️' : '🌙'}}</text>
+      </view>
+    </view>
+    
+    <!-- 漂浮弹幕 -->
+    <view class="messages-wall">
+      <view wx:for="{{floatingMessages}}" wx:key="index" class="message-item">
+        <text>{{item.text}}</text>
+      </view>
+    </view>
+  </view>
+</scroll-view>

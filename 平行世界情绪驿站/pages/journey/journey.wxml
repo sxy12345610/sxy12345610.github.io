@@ -1,0 +1,88 @@
+<scroll-view scroll-y class="page-scroll" enhanced show-scrollbar="false">
+  <view class="container {{isNightMode ? 'night-mode' : ''}}" style="transition: all 0.5s ease;">
+    <view class="journey-page">
+      <text class="page-title">🚀 我的旅程</text>
+    
+    <!-- 统计概览 -->
+    <view class="stats-overview">
+      <view class="stat-card">
+        <text class="stat-num">{{stats.totalCards}}</text>
+        <text class="stat-label">抽取卡片</text>
+      </view>
+      <view class="stat-card">
+        <text class="stat-num">{{stats.completedChallenges}}</text>
+        <text class="stat-label">完成挑战</text>
+      </view>
+      <view class="stat-card">
+        <text class="stat-num">{{stats.daysCount}}</text>
+        <text class="stat-label">连续天数</text>
+      </view>
+      <view class="stat-card">
+        <text class="stat-num">{{stats.identityCards}}</text>
+        <text class="stat-label">身份卡片</text>
+      </view>
+    </view>
+    
+    <!-- 今日心情 -->
+    <view class="mood-section">
+      <text class="section-title">🌙 今日心情</text>
+      <view wx:if="{{todayMood}}" class="mood-card">
+        <text class="mood-emoji">{{todayMood.emoji}}</text>
+        <text class="mood-text">{{todayMood.text}}</text>
+      </view>
+      <view wx:else class="mood-empty">
+        <text class="empty-text">今日心情待记录</text>
+      </view>
+    </view>
+    
+    <!-- 情绪分布 -->
+    <view class="emotion-chart">
+      <text class="section-title">📊 情绪分布</text>
+      <view class="chart-bars">
+        <view wx:for="{{emotionStats}}" wx:key="name" class="bar-item">
+          <text class="bar-label">{{item.name}}</text>
+          <view class="bar-container">
+            <view class="bar-fill" style="width: {{item.percent}}%; background: {{item.color}};"></view>
+          </view>
+          <text class="bar-value">{{item.count}}</text>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 成就系统 -->
+    <view class="achievements-section">
+      <text class="section-title">🏆 成就</text>
+      <view class="achievements-grid">
+        <view wx:for="{{achievements}}" wx:key="id" class="achievement-item" data-id="{{item.id}}" bindtap="showAchievement">
+          <view class="achievement-icon" style="background: {{item.unlocked ? item.bgColor : '#e9ecef'}};">
+            <text>{{item.unlocked ? item.icon : '🔒'}}</text>
+          </view>
+          <text class="achievement-name">{{item.name}}</text>
+          <text class="achievement-desc">{{item.desc}}</text>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 近期记录 -->
+    <view class="history-section">
+      <text class="section-title">📝 近期记录</text>
+      <view class="history-list">
+        <view wx:for="{{recentRecords}}" wx:key="time" class="history-item">
+          <text class="history-time">{{formatTime(item.time)}}</text>
+          <text class="history-content">{{item.content}}</text>
+        </view>
+        <view wx:if="{{recentRecords.length === 0}}" class="empty-history">
+          <text class="empty-text">暂无记录</text>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 分享按钮 -->
+    <view class="share-section">
+      <button class="share-btn" bindtap="shareJourney">
+        <text>📤 分享我的旅程</text>
+      </button>
+    </view>
+    </view>
+  </view>
+</scroll-view>

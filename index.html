@@ -314,14 +314,18 @@
         .wechat-steps {
             display: flex;
             justify-content: center;
-            gap: 30px;
+            align-items: center;
+            gap: 15px;
             margin-top: 25px;
+            position: relative;
         }
         .step-item {
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 8px;
+            position: relative;
+            z-index: 1;
         }
         .step-num {
             width: 30px;
@@ -338,6 +342,17 @@
         .step-item span:last-child {
             font-size: 12px;
             color: #8d7a9e;
+        }
+        /* 步骤之间的连接线 */
+        .wechat-steps::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50px;
+            right: 50px;
+            height: 2px;
+            background: linear-gradient(to right, #84fab0 0%, #8fd3f4 50%, #84fab0 100%);
+            z-index: 0;
         }
         
         /* 扫描动画 */
@@ -664,6 +679,43 @@
         .page-title { font-size: 24px; font-weight: bold; color: #5d4e6d; text-align: center; margin-bottom: 30px; }
         .emotion-page { padding-top: 30px; }
         .emotion-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        /* 向下滑动提示箭头 */
+        .scroll-hint {
+            position: fixed;
+            bottom: calc(80px + env(safe-area-inset-bottom));
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            animation: bounceHint 2s ease-in-out infinite;
+            pointer-events: none;
+        }
+        .scroll-hint-arrow {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+        .scroll-hint-text {
+            font-size: 12px;
+            color: #8d7a9e;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 4px 12px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        @keyframes bounceHint {
+            0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.8; }
+            50% { transform: translateX(-50%) translateY(10px); opacity: 1; }
+        }
         .emotion-card {
             background: white; border-radius: 20px; padding: 25px 15px; text-align: center;
             box-shadow: 0 8px 25px rgba(0,0,0,0.08); cursor: pointer;
@@ -993,10 +1045,11 @@ body {
             color: rgba(93, 78, 109, 0.65); 
             animation: floatMessage 18s linear infinite;
             line-height: 1.4;
+            left: 100%;
         }
         @keyframes floatMessage {
-            from { transform: translateX(100vw); }
-            to { transform: translateX(-120%); }
+            from { transform: translateX(0); }
+            to { transform: translateX(calc(-100vw - 200px)); }
         }
         .poster-page { padding-top: 20px; }
         .input-group { margin-bottom: 20px; }
@@ -2167,6 +2220,11 @@ body {
                         <button class="btn btn-primary" onclick="goToCardsPage()">再抽一次</button>
                         <button class="btn btn-secondary" onclick="goToHome()">返回首页</button>
                     </div>
+                    <!-- 向下滑动提示 -->
+                    <div class="scroll-hint">
+                        <div class="scroll-hint-arrow">⬇️</div>
+                        <div class="scroll-hint-text">下滑查看更多</div>
+                    </div>
                 </div>
             `;
         }
@@ -2318,7 +2376,7 @@ body {
             const messageItem = document.createElement('div');
             messageItem.className = 'message-item';
             messageItem.textContent = message;
-            messageItem.style.top = (Math.random() * 60 + 10) + '%';
+            messageItem.style.top = (Math.random() * 80 + 10) + 'px';
             messageItem.style.animationDelay = '0s';
             messageItem.style.animationDuration = (10 + Math.random() * 10) + 's';
             messageItem.style.color = '#5d4e6d';
@@ -2775,15 +2833,15 @@ body {
 
         function initMessagesWall() {
             messagesWall.innerHTML = '';
-            // 预设垂直位置，避免重叠
-            const positions = [15, 35, 55, 75, 25, 45, 65, 85];
+            // 预设垂直位置（像素值），确保弹幕在容器内均匀分布
+            const positions = [10, 30, 50, 70, 20, 40];
             for (let i = 0; i < 6; i++) {
                 const message = sampleMessages[Math.floor(Math.random() * sampleMessages.length)];
                 const item = document.createElement('div');
                 item.className = 'message-item';
                 item.textContent = message;
                 // 使用预设位置，确保弹幕垂直分布均匀
-                item.style.top = positions[i] + '%';
+                item.style.top = positions[i] + 'px';
                 item.style.animationDelay = Math.random() * 18 + 's';
                 item.style.animationDuration = (15 + Math.random() * 10) + 's';
                 messagesWall.appendChild(item);

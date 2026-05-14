@@ -1,0 +1,78 @@
+<scroll-view scroll-y class="page-scroll" enhanced show-scrollbar="false">
+  <!-- 用于生成身份卡图片的隐藏canvas -->
+  <canvas canvas-id="identity-card-canvas" class="hidden-canvas" style="width: 300px; height: 400px;"></canvas>
+  
+  <view class="container {{isNightMode ? 'night-mode' : ''}}" style="transition: all 0.5s ease;">
+    <view class="identity-page">
+      <text class="page-title">✨ 平行身份卡</text>
+      
+      <view wx:if="{{identityCard}}" class="identity-card">
+        <view class="card-header">
+          <text class="card-title">今日平行身份</text>
+          <text class="card-date">{{currentDate}}</text>
+        </view>
+        
+        <view class="card-content">
+          <view class="avatar-section">
+            <text class="avatar-emoji">{{identityCard.avatar}}</text>
+          </view>
+          <text class="identity-name">{{identityCard.name}}</text>
+          <text class="identity-title">{{identityCard.title}}</text>
+          
+          <view class="identity-stats">
+            <view class="stat">
+              <text class="stat-value">{{identityCard.power}}</text>
+              <text class="stat-label">能力值</text>
+            </view>
+            <view class="stat">
+              <text class="stat-value">{{identityCard.luck}}</text>
+              <text class="stat-label">幸运值</text>
+            </view>
+            <view class="stat">
+              <text class="stat-value">{{identityCard.charm}}</text>
+              <text class="stat-label">魅力值</text>
+            </view>
+          </view>
+          
+          <view class="identity-description">
+            <text class="description-title">🌟 今日能力</text>
+            <text class="description-text">{{identityCard.skill}}</text>
+          </view>
+          
+          <view class="identity-message">
+            <text class="message-text">{{identityCard.message}}</text>
+          </view>
+        </view>
+        
+        <view class="card-footer">
+          <text class="footer-text">平行世界情绪驿站 · 每日更新</text>
+        </view>
+      </view>
+      
+      <view class="action-buttons">
+        <button class="generate-btn" bindtap="generateIdentity">
+          <text>🔮 生成今日身份</text>
+        </button>
+        
+        <button class="save-btn" bindtap="saveIdentityCard">
+          <text>💾 保存身份卡</text>
+        </button>
+      </view>
+      
+      <view class="history-section">
+        <text class="section-title">📜 历史身份</text>
+        <scroll-view class="history-list" scroll-x="true">
+          <view wx:for="{{historyCards}}" wx:key="date" class="history-card" bindtap="showHistoryCard" data-index="{{index}}">
+            <text class="history-avatar">{{item.avatar}}</text>
+            <text class="history-date">{{formatDate(item.date)}}</text>
+          </view>
+        </scroll-view>
+      </view>
+      
+      <view class="share-tip">
+        <text class="tip-icon">💡</text>
+        <text class="tip-content">分享你的平行身份卡，让朋友也来探索平行世界！</text>
+      </view>
+    </view>
+  </view>
+</scroll-view>

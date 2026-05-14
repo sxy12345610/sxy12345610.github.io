@@ -1,0 +1,92 @@
+<scroll-view scroll-y class="page-scroll" enhanced show-scrollbar="false">
+  <view class="container {{isNightMode ? 'night-mode' : ''}}" style="transition: all 0.5s ease;">
+
+    <view class="page-header">
+      <text class="page-title">{{selectedEmotion ? selectedEmotion + '的平行世界' : '现在的你，心情如何？'}}</text>
+    </view>
+
+    <view class="night-mode-toggle" bindtap="toggleNightMode">
+      <text class="toggle-icon">{{isNightMode ? '☀️' : '🌙'}}</text>
+    </view>
+
+    <!-- 情绪选择区域 -->
+    <view wx:if="{{!showCards}}" class="emotion-page">
+      <view class="emotion-grid">
+        <view wx:for="{{emotions}}" wx:key="name"
+              class="emotion-card {{selectedEmotion === item.name ? 'selected' : ''}}"
+              bindtap="selectEmotion" data-emotion="{{item.name}}">
+          <text class="emotion-icon">{{item.icon}}</text>
+          <text class="emotion-name">{{item.name}}</text>
+        </view>
+      </view>
+
+      <button wx:if="{{selectedEmotion}}" class="confirm-btn" bindtap="drawCards">
+        <text>🎴 抽取{{selectedEmotion}}心情卡片</text>
+      </button>
+    </view>
+
+    <!-- 卡片展示区域 -->
+    <view wx:if="{{showCards}}" class="cards-section">
+      <view class="cards-wrapper">
+        <view wx:for="{{currentCards}}" wx:key="index" class="card-item" style="animation-delay: {{index * 0.15}}s;">
+          <view class="card {{flippedCards[index] ? 'flipped' : ''}}" bindtap="flipCard" data-index="{{index}}">
+            <view class="flip-card-inner">
+              <view class="card-front">
+                <view class="card-content">
+                  <text class="emotion-tag" style="background: {{getEmotionColor(item.emotion)}}">{{item.emotion}}</text>
+                  <text class="story-text">{{item.text}}</text>
+                  <view class="challenge-box">
+                    <text class="challenge-label">🌱 温柔挑战</text>
+                    <text class="challenge-text">{{item.challenge}}</text>
+                  </view>
+                  <text class="small-action">💡 小行动：{{getSmallAction(item.emotion)}}</text>
+                  <text class="social-count">💫 此刻有 <text class="count-number">{{getCardDrawCount(item.text)}}</text> 个灵魂也在读这个故事</text>
+                </view>
+                <view class="card-footer">
+                  <button class="complete-btn {{completedCards[index] ? 'completed' : ''}}"
+                          bindtap="completeChallenge" data-index="{{index}}">
+                    <text>{{completedCards[index] ? '✓ 已完成' : '完成挑战'}}</text>
+                  </button>
+                </view>
+              </view>
+              <view class="card-back">
+                <text class="card-back-icon">🌟</text>
+                <text class="card-back-text">{{item.backText}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 用户输入寄语区域 -->
+      <view class="message-input-area">
+        <text class="input-label">💌 留下你的温暖寄语</text>
+        <input type="text" class="message-input" placeholder="输入你想说的话..."
+               maxlength="50" bindinput="updateMoodBar" value="{{userMessage}}" />
+        <button class="submit-btn" bindtap="submitMessage">
+          <text>让寄语漂浮起来 ✨</text>
+        </button>
+      </view>
+
+      <view class="btn-group">
+        <button class="btn btn-primary" bindtap="drawCards">再抽一次</button>
+        <button class="btn btn-secondary" bindtap="goToHome">返回首页</button>
+      </view>
+    </view>
+
+    <!-- 今日已抽卡提示 -->
+    <view wx:if="{{hasDrawnToday && !showCards}}" class="drawn-tip">
+      <text class="tip-icon">✨</text>
+      <text class="tip-text">今天的卡片已抽取，明天再来吧！</text>
+    </view>
+  </view>
+</scroll-view>
+
+<!-- 漂浮弹幕 -->
+<view class="messages-wall {{isNightMode ? 'night-mode' : ''}}">
+  <view wx:for="{{floatingMessages}}" wx:key="index"
+        class="message-item"
+        style="top: {{item.top}}px; animation-duration: {{item.duration}}s; animation-delay: {{item.delay}}s;">
+    <text>{{item.text}}</text>
+  </view>
+</view>

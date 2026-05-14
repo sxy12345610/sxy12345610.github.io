@@ -1,0 +1,419 @@
+/* ============================================
+   首页样式
+   ============================================ */
+
+/* 页面容器 */
+.page-scroll {
+  height: 100vh;
+}
+
+.home-page {
+  text-align: center;
+  padding-top: 60rpx;
+  padding-bottom: 200rpx;
+  position: relative;
+  z-index: 1;
+}
+
+/* 头部 */
+.home-header {
+  margin-bottom: 80rpx;
+}
+
+.home-title {
+  font-size: 64rpx;
+  font-weight: bold;
+  color: #5d4e6d;
+  margin-bottom: 20rpx;
+  display: block;
+  text-shadow: 4rpx 4rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.home-subtitle {
+  font-size: 32rpx;
+  color: #8d7a9e;
+  display: block;
+}
+
+/* 漂浮粒子 */
+.particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.particle {
+  position: absolute;
+  width: 12rpx;
+  height: 12rpx;
+  background: rgba(102, 126, 234, 0.3);
+  border-radius: 50%;
+  animation: particleFloat 6s ease-in-out infinite;
+}
+
+/* 情绪指数卡片 */
+.mood-index-card {
+  background: white;
+  border-radius: 32rpx;
+  padding: 40rpx;
+  margin: 0 30rpx 30rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.08);
+}
+
+.index-title {
+  font-size: 28rpx;
+  color: #5d4e6d;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 30rpx;
+}
+
+.mood-ring {
+  width: 180rpx;
+  height: 180rpx;
+  margin: 0 auto 20rpx;
+  position: relative;
+}
+
+.ring-progress {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  mask: radial-gradient(transparent 55%, #000 56%);
+  -webkit-mask: radial-gradient(transparent 55%, #000 56%);
+}
+
+.ring-inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.mood-value {
+  font-size: 48rpx;
+  font-weight: bold;
+  color: #667eea;
+  display: block;
+}
+
+.mood-label {
+  font-size: 20rpx;
+  color: #8d7a9e;
+}
+
+.mood-desc {
+  font-size: 26rpx;
+  color: #5d4e6d;
+  display: block;
+}
+
+/* 签到卡片 */
+.checkin-card {
+  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+  border-radius: 32rpx;
+  padding: 30rpx;
+  margin: 0 30rpx 40rpx;
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  box-shadow: 0 8rpx 32rpx rgba(252, 182, 159, 0.3);
+}
+
+.checkin-icon {
+  font-size: 60rpx;
+}
+
+.checkin-content {
+  flex: 1;
+  text-align: left;
+}
+
+.checkin-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #5d4e6d;
+  display: block;
+}
+
+.checkin-desc {
+  font-size: 24rpx;
+  color: #8d7a9e;
+}
+
+.checkin-streak {
+  background: rgba(255, 255, 255, 0.5);
+  padding: 10rpx 20rpx;
+  border-radius: 30rpx;
+}
+
+.streak-text {
+  font-size: 22rpx;
+  color: #5d4e6d;
+  font-weight: bold;
+}
+
+/* 统计行 */
+.stats-row {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 40rpx;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 56rpx;
+  font-weight: bold;
+  color: #667eea;
+  display: block;
+}
+
+.stat-label {
+  font-size: 24rpx;
+  color: #8d7a9e;
+  margin-top: 10rpx;
+}
+
+/* 开始按钮 */
+.start-btn {
+  background: linear-gradient(135deg, #ffb7b2 0%, #ffecd2 100%);
+  border: none;
+  padding: 30rpx 80rpx;
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #5d4e6d;
+  border-radius: 100rpx;
+  box-shadow: 0 16rpx 50rpx rgba(255, 183, 178, 0.4);
+  transition: all 0.3s ease;
+  margin-bottom: 40rpx;
+}
+
+.start-btn:active {
+  transform: translateY(4rpx);
+  box-shadow: 0 8rpx 30rpx rgba(255, 183, 178, 0.3);
+}
+
+/* 快捷操作 */
+.quick-actions {
+  display: flex;
+  gap: 20rpx;
+  margin: 0 30rpx 40rpx;
+}
+
+.action-card {
+  flex: 1;
+  background: white;
+  border-radius: 30rpx;
+  padding: 30rpx 20rpx;
+  text-align: center;
+  box-shadow: 0 8rpx 30rpx rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+
+.action-card:active {
+  transform: scale(0.95);
+}
+
+.action-card.ai-card {
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+}
+
+.action-icon {
+  font-size: 56rpx;
+  display: block;
+  margin-bottom: 16rpx;
+}
+
+.action-text {
+  font-size: 28rpx;
+  color: #5d4e6d;
+  font-weight: 500;
+}
+
+/* 每日消息 */
+.daily-message {
+  background: linear-gradient(135deg, #e8f5e9 0%, #fce4ec 100%);
+  border-radius: 30rpx;
+  padding: 30rpx;
+  text-align: left;
+  margin: 0 30rpx 40rpx;
+}
+
+.message-icon {
+  font-size: 36rpx;
+  margin-right: 16rpx;
+}
+
+.message-content {
+  font-size: 28rpx;
+  color: #5d4e6d;
+  line-height: 1.6;
+}
+
+/* 漂浮瓶子 */
+.floating-bottle {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+  border-radius: 40rpx;
+  padding: 40rpx;
+  margin: 0 30rpx 40rpx;
+  animation: bottleFloat 3s ease-in-out infinite;
+}
+
+.bottle-icon {
+  font-size: 60rpx;
+  display: block;
+  margin-bottom: 20rpx;
+}
+
+.bottle-text {
+  font-size: 28rpx;
+  color: #5d4e6d;
+  line-height: 1.6;
+}
+
+/* 夜间模式切换按钮 */
+.night-mode-toggle {
+  position: fixed;
+  top: 120rpx;
+  right: 20rpx;
+  width: 80rpx;
+  height: 80rpx;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 30rpx rgba(0, 0, 0, 0.1);
+  z-index: 100;
+}
+
+.toggle-icon {
+  font-size: 36rpx;
+}
+
+/* 夜间模式样式 */
+.night-mode .home-title {
+  color: #e8e8e8;
+}
+
+.night-mode .home-subtitle {
+  color: #a0a0a0;
+}
+
+.night-mode .mood-index-card {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.night-mode .index-title {
+  color: #e8e8e8;
+}
+
+.night-mode .mood-value {
+  color: #a8c5e0;
+}
+
+.night-mode .mood-label {
+  color: #a0a0a0;
+}
+
+.night-mode .mood-desc {
+  color: #e8e8e8;
+}
+
+.night-mode .checkin-card {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.3) 0%, rgba(118, 75, 162, 0.3) 100%);
+}
+
+.night-mode .checkin-title {
+  color: #e8e8e8;
+}
+
+.night-mode .checkin-desc {
+  color: #a0a0a0;
+}
+
+.night-mode .streak-text {
+  color: #e8e8e8;
+}
+
+.night-mode .checkin-streak {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.night-mode .stat-number {
+  color: #a8c5e0;
+}
+
+.night-mode .stat-label {
+  color: #a0a0a0;
+}
+
+.night-mode .start-btn {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.6) 0%, rgba(118, 75, 162, 0.6) 100%);
+  color: #e8e8e8;
+}
+
+.night-mode .action-card {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.night-mode .action-card.ai-card {
+  background: linear-gradient(135deg, rgba(168, 237, 234, 0.2) 0%, rgba(254, 214, 227, 0.2) 100%);
+}
+
+.night-mode .action-text {
+  color: #e8e8e8;
+}
+
+.night-mode .daily-message {
+  background: linear-gradient(135deg, rgba(168, 237, 234, 0.1) 0%, rgba(254, 214, 227, 0.1) 100%);
+}
+
+.night-mode .message-content {
+  color: #e8e8e8;
+}
+
+.night-mode .floating-bottle {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.night-mode .bottle-text {
+  color: #e8e8e8;
+}
+
+.night-mode .night-mode-toggle {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.night-mode .particle {
+  background: rgba(168, 197, 224, 0.3);
+}
+
+/* 动画定义 */
+@keyframes particleFloat {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateY(-100rpx) translateX(20rpx);
+    opacity: 0.6;
+  }
+}
+
+@keyframes bottleFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10rpx);
+  }
+}
